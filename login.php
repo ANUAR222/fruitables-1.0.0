@@ -170,7 +170,6 @@
                     console.log(xhr.responseText);
                     var response = JSON.parse(xhr.responseText);
                     if (response.success) {
-
                         window.open("index.php", "_self");
                     } else {
                         alert("datos incorrectos");

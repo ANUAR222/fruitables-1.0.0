@@ -85,116 +85,65 @@ require 'nav_bar.php'
                             <th scope="col">Handle</th>
                           </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                    </div>
-                                </th>
-                                <td>
-                                    <p class="mb-0 mt-4">Big Banana</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
-                                        <i class="fa fa-times text-danger"></i>
-                                    </button>
-                                </td>
-                            
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
-                                    </div>
-                                </th>
-                                <td>
-                                    <p class="mb-0 mt-4">Potatoes</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
-                                        <i class="fa fa-times text-danger"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="img/vegetable-item-2.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
-                                    </div>
-                                </th>
-                                <td>
-                                    <p class="mb-0 mt-4">Awesome Brocoli</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">2.99 $</p>
-                                </td>
-                                <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
-                                        <i class="fa fa-times text-danger"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tbody id="carrito">
+
+                            <?php
+                            $host = "localhost";
+                            $user = "root";
+                            $pass = "";
+                            $db = "sabercomer";
+                            $conexion = mysqli_connect($host, $user, $pass, $db);
+
+                            $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
+$sql = "SELECT * FROM  comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";
+$stmt = $conexion->prepare($sql);
+$stmt->bind_param("i", $id_usuario);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($comida = $result->fetch_assoc()) {
+    echo '
+    <tr>
+        <th scope="row">
+            <div class="d-flex align-items-center">
+                <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
+            </div>
+        </th>
+        <td>
+            <p class="mb-0 mt-4">' . $comida['Nombre'] . '</p>
+        </td>
+        <td>
+            <p class="mb-0 mt-4">' . $comida['Precio'] . ' $</p>
+        </td>
+        <td>
+            <div class="input-group quantity mt-4" style="width: 100px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                    <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control form-control-sm text-center border-0" value="' . $comida['cantidad'] . '">
+                <div class="input-group-btn">
+                    <button onclick="aniadirCarrito('.$comida['id'].')" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                        <i class="fa fa-plus "></i>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td>
+            <p class="mb-0 mt-4" id="precio">' . $comida['Precio'] * $comida['cantidad'] . ' $</p>
+        </td>
+        <td>
+            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                <i class="fa fa-times text-danger"></i>
+            </button>
+        </td>
+    </tr>';
+}
+$stmt->close();
+$conexion->close();
+
+                            ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -340,6 +289,36 @@ require 'nav_bar.php'
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        function aniadirCarrito(id){
+            var cantidad = 1;
+            var data = {
+                id: id,
+                cantidad: cantidad
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "apis.php?añadirCarrito", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+
+                        alert("Se añadio al carrito");
+                    } else {
+                        console.error("Error: ", response.message);
+                    }
+                } else {
+                    console.error("Error: ", xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+    </script>
     </body>
 
 </html>

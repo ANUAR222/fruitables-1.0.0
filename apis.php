@@ -97,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['login'])) {
             $user = $result->fetch_assoc();
 
             if ($user) {
+                $_SESSION['id'] = $user['id'];
                 $_SESSION['correo'] = $username;
                 echo json_encode(array("success" => true, "data" => $user));
             } else {
@@ -156,10 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['registro'])) {
         echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
     }
 }
-
-
-
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['editarplatos'])) {
     // Obtener los datos del cuerpo de la solicitud
@@ -246,6 +243,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['cerrar'])) {
     session_destroy();
     echo json_encode(["status" => "success", "message" => "Session closed"]);
 }
+
+/*function aniadirCarrito(id){
+    var cantidad = 1;
+    var data = {
+        id: id,
+        cantidad: cantidad
+    };
+
+    console.log(data);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "apis.php?añadirCarrito", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === "success") {
+                alert("Operation successful");
+            } else {
+                console.error("Error: ", response.message);
+            }
+        } else {
+            console.error("Error: ", xhr.status);
+        }
+    };
+    xhr.send(JSON.stringify(data));
+}*/
+if($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['añadirCarrito'])){
+    $json_data = file_get_contents("php://input");
+    $data = json_decode($json_data, true);
+    $id = $data['id'];
+    $cantidad = $data['cantidad'];
+    $id_usuario = $_SESSION['id'];
+    // Verificar si la comida ya está en el carrito
+    $sql = "SELECT * FROM carrito WHERE id_comida = ? AND id_usuario = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("ii", $id, $id_usuario);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $item = $result->fetch_assoc();
+    if ($item) {
+        // Si la comida ya está en el carrito, incrementar la cantidad
+        $sql = "UPDATE carrito SET cantidad = cantidad + ? WHERE id_comida = ? AND id_usuario = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("iii", $cantidad, $id, $id_usuario);
+    } else {
+        // Si la comida no está en el carrito, insertarla
+        $sql = "INSERT INTO carrito (id_comida, cantidad, id_usuario) VALUES (?, ?, ?)";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("iii", $id, $cantidad, $id_usuario);
+    }
+
+    if ($stmt->execute()) {
+        echo json_encode(["status" => "success", "message" => "Operation successful","data"=>[
+            "cantidad"=>$cantidad
+            ,"precio"=>$precio
+        ]]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+    }
+
+    $stmt->close();
+}
+
+
 
 $conexion->close();
 ?>

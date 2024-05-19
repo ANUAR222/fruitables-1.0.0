@@ -78,6 +78,11 @@ echo '
                 </nav>
             </div>
         </div>
+        <script>
+        function ver_detalles(id){
+            href="detalles.php?id="+id;
+        }
+</script>
         <!-- Navbar End -->';
 }else{
     header('Location: login.php');

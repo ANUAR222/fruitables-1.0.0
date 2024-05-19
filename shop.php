@@ -268,7 +268,7 @@ require 'nav_bar.php'
                                                     <p>'.$row['Ingredientes'].'</p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
-                                                        <a onclick="añadir_al_carrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
+                                                        <a onclick="aniadirCarrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
                                                         <a onclick="ver_detalles('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Ver detalles</a>
                                                         </div>
                                                 </div>
@@ -422,6 +422,37 @@ require 'nav_bar.php'
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        function aniadirCarrito(id){
+    var cantidad = 1;
+    var data = {
+        id: id,
+        cantidad: cantidad
+    };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "apis.php?añadirCarrito", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === "success") {
+                alert("Se añadio al carrito");
+            } else {
+                console.error("Error: ", response.message);
+            }
+        } else {
+            console.error("Error: ", xhr.status);
+        }
+    };
+    xhr.send(JSON.stringify(data));
+}
+        function ver_detalles(id){
+            console.log("sksl")
+            window.location.href = "shop-detail.php?id="+id;
+        }
+    </script>
     </body>
 
 </html>

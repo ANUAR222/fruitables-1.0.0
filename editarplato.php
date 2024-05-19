@@ -70,32 +70,44 @@ require 'nav_bar.php'
                         <div class="border rounded">
                             <a href="#">
                                 <img src="img/single-item.jpg" class="img-fluid rounded" alt="Image">
+
                             </a>
                         </div>
                     </div>
+                    <!-- create table comidas
+(
+    id               int auto_increment
+        primary key,
+    Nombre           varchar(100)                             not null,
+    Precio           decimal(10, 2)                           not null,
+    Peso             decimal(10, 2)                           not null,
+    Calorías         int                                      null,
+    Ingredientes     text                                     null,
+    Valoración_media decimal(3, 2)                            null,
+    Tipo             enum ('Entrante', 'Principal', 'Postre') not null
+); -->
                     <div class="col-lg-6">
-                        <input id="nombre" type="text" class="form-control mb-3" value="Brocoli">
-                        <input id="Category" type="text" class="form-control mb-3" value="Category: Vegetables">
-                        <input id="precio" type="text" class="form-control mb-3" value="3,35 $">
-                        <div class="d-flex mb-4">
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <textarea id="decripcion" class="form-control mb-4">The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic words etc.</textarea>
-                        <div class="input-group quantity mb-5" style="width: 100px;">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                    <i class="fa fa-minus"></i>
-                                </button>
+                        <div class="border rounded p-4">
+                            <h2 class="mb-4">Editar Plato</h2>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Nombre">
                             </div>
-                            <input id="stok" type="text" class="form-control form-control-sm text-center border-0" value="1">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                    <i class="fa fa-plus"></i>
-                                </button>
+                            <div class="mb-3">
+                                <label for="Category" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="Category" placeholder="Category">
+                            </div>
+                            <div class="mb-3">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input type="text" class="form-control" id="precio" placeholder="Precio">
+                            </div>
+                            <div class="mb-3">
+                                <label for="decripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="decripcion" rows="3" placeholder="Descripción"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stok" class="form-label">Stock</label>
+                                <input type="text" class="form-control" id="stok" placeholder="Stock">
                             </div>
                         </div>
                         <!-- Botones de edición y eliminación -->

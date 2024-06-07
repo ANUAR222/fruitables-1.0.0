@@ -306,7 +306,6 @@ $conexion->close();
                     console.log(xhr.responseText);
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === "success") {
-
                         alert("Se añadio al carrito");
                     } else {
                         console.error("Error: ", response.message);

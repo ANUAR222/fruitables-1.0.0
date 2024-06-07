@@ -1,10 +1,10 @@
 <?php
 header('Content-type: application/json; charset=utf-8');
-$host = "localhost";
-$user = "root";
-$pass = "";
+$host = "complist.mysql.database.azure.com";
+$user = "complist";
+$db_password = "ISI2023-2024";
 $db = "sabercomer";
-$conexion = mysqli_connect($host, $user, $pass, $db);
+$conexion = new mysqli($host, $user, $db_password, $db);
 if (!$conexion) {
     echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
     echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
@@ -39,11 +39,6 @@ if (!$conexion) {
     });
 }*/
 header('Content-type: application/json; charset=utf-8');
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db = "sabercomer";
-$conexion = new mysqli($host, $user, $pass, $db);
 session_start();
 if ($conexion->connect_error) {
     die(json_encode(["status" => "error", "message" => "Connection failed: " . $conexion->connect_error]));
@@ -299,7 +294,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['añadirCarrito'])){
     if ($stmt->execute()) {
         echo json_encode(["status" => "success", "message" => "Operation successful","data"=>[
             "cantidad"=>$cantidad
-            ,"precio"=>$precio
         ]]);
     } else {
         echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);

@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/Sabercomer</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="sabercomer@complist.mysql.database.azure.com" uuid="b2c38e00-1b95-452f-ac86-e7ea5f957cf9">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://complist.mysql.database.azure.com:3306/sabercomer</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

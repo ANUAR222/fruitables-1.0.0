@@ -1,7 +1,7 @@
 <?php
-$host = "localhost";
-$user = "root";
-$pass = "";
+$host = "complist.mysql.database.azure.com";
+$user = "complist";
+$pass = "ISI2023-2024";
 $db = "sabercomer";
 $conexion = mysqli_connect($host, $user, $pass, $db);
 if (!$conexion) {

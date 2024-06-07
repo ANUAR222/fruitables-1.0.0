@@ -11,6 +11,32 @@
     };
     spinner(0);
 
+    // Función de barra de búsqueda
+    $(document).ready(function(){
+        $('#search').on('input', function(){
+            buscarProductos($(this).val());
+        });
+    });
+
+    function buscarProductos(query){
+        $.ajax({
+            url: 'buscar_productos.php',
+            type: 'POST',
+            data: {query: query},
+            success: function(response){
+                // Aquí puedes manejar la respuesta del servidor.
+                // Por ejemplo, podrías reemplazar el contenido de la lista de productos con los productos devueltos por la búsqueda.
+                $('#lista-productos').html(response);
+            }
+        });
+    }
+
+    // Icono de búsqueda
+    $(document).ready(function(){
+        $('#search-icon-1').on('click', function(){
+            buscarProductos($('input[type=search]').val());
+        });
+    });
 
     // Fixed Navbar
     $(window).scroll(function () {
@@ -26,10 +52,10 @@
             } else {
                 $('.fixed-top').removeClass('shadow').css('top', 0);
             }
-        } 
+        }
     });
-    
-    
+
+
    // Back to top button
    $(window).scroll(function () {
     if ($(this).scrollTop() > 300) {

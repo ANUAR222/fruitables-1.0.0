@@ -88,11 +88,12 @@ require 'nav_bar.php'
                         <tbody id="carrito">
 
                             <?php
-                            $host = "localhost";
-                            $user = "root";
-                            $pass = "";
+                            $host = "complist.mysql.database.azure.com";
+                            $user = "complist";
+                            $db_password = "ISI2023-2024";
                             $db = "sabercomer";
-                            $conexion = mysqli_connect($host, $user, $pass, $db);
+                            global $conexion;
+                            $conexion = new mysqli($host, $user, $db_password, $db);
 
                             $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
 $sql = "SELECT * FROM  comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";

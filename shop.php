@@ -76,7 +76,7 @@ require 'nav_bar.php'
                             <div class="col-xl-3">
                                 <form id="search-form" class="input-group w-100 mx-auto d-flex" method="POST" action="buscar_productos.php">
                                     <input type="search" id="search-input" name="query" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                                    <span onclick="document.getElementById('search-form').submit();" id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                                    <span onclick="document.getElementById('search-form').submit();" id="search-icon-1" class="input-group-text p-3" style="cursor:pointer;"><i class="fa fa-search"></i></span>
 
                                 </form>
                             </div>

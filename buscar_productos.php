@@ -1,32 +1,76 @@
 <?php
-if (isset($_POST['query'])) {
-    $query = $_POST['query'];
-    $host = "complist.mysql.database.azure.com";
-    $user = "complist";
-    $db_password = "ISI2023-2024";
-    $db = "sabercomer";
-    // Conexión a la base de datos
-    $conexion = new mysqli($host, $user, $db_password, $db);
+header('Content-Type: application/json');
 
-    // Verificar la conexión
-    if ($conexion->connect_error) {
-        die("Error de conexión: " . $conexion->connect_error);
-    }
+$host = "complist.mysql.database.azure.com";
+$user = "complist";
+$db_password = "ISI2023-2024";
+$db = "sabercomer";
 
-    // Consulta a la base de datos
-    $sql = "SELECT * FROM comidas WHERE Nombre LIKE '%$query%'";
-    $result = $conexion->query($sql);
+$conexion = new mysqli($host, $user, $db_password, $db);
 
-    // Generar la respuesta
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo '<li>' . $row['Nombre'] . '</li>';
-        }
-    } else {
-        echo 'No se encontraron productos';
-    }
-
-    // Cerrar la conexión
-    $conexion->close();
+if ($conexion->connect_error) {
+    die("Connection failed: " . $conexion->connect_error);
 }
+
+$query = isset($_GET['query']) ? $_GET['query'] : '';
+
+if ($query) {
+    $stmt = $conexion->prepare("SELECT * FROM comidas WHERE Nombre LIKE ?");
+    $search = "%{$query}%";
+    $stmt->bind_param("s", $search);
+} else {
+    $stmt = $conexion->prepare("SELECT * FROM comidas");
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$productos = [];
+
+while ($row = $result->fetch_assoc()) {
+    $productos[] = $row;
+}
+
+$stmt->close();
+$conexion->close();
+
+echo json_encode($productos);
+?>
+<?php
+header('Content-Type: application/json');
+
+$host = "complist.mysql.database.azure.com";
+$user = "complist";
+$db_password = "ISI2023-2024";
+$db = "sabercomer";
+
+$conexion = new mysqli($host, $user, $db_password, $db);
+
+if ($conexion->connect_error) {
+    die("Connection failed: " . $conexion->connect_error);
+}
+
+$query = isset($_GET['query']) ? $_GET['query'] : '';
+
+if ($query) {
+    $stmt = $conexion->prepare("SELECT * FROM comidas WHERE Nombre LIKE ?");
+    $search = "%{$query}%";
+    $stmt->bind_param("s", $search);
+} else {
+    $stmt = $conexion->prepare("SELECT * FROM comidas");
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$productos = [];
+
+while ($row = $result->fetch_assoc()) {
+    $productos[] = $row;
+}
+
+$stmt->close();
+$conexion->close();
+
+echo json_encode($productos);
 ?>

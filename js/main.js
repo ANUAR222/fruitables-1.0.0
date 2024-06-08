@@ -1,6 +1,5 @@
 (function ($) {
     "use strict";
-
     // Spinner
     var spinner = function () {
         setTimeout(function () {
@@ -14,7 +13,9 @@
     // Función de barra de búsqueda
     $(document).ready(function(){
         $('#search').on('input', function(){
+            console.log("Hola");
             buscarProductos($(this).val());
+
         });
     });
 
@@ -155,6 +156,12 @@
         })
     });
 
+    // Función que escuche si hago click en el botón de búsqueda
+    $(document).ready(function(){
+        $('#search-icon-1').on('click', function(){
+            buscarProductos($('input[type=search]').val());
+        });
+    });
 
 
     // Product Quantity

@@ -83,34 +83,61 @@ require 'nav_bar.php'
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <h4 class="fw-bold mb-3">Brocoli</h4>
-                                <p class="mb-3">Category: Vegetables</p>
-                                <h5 class="fw-bold mb-3">3,35 $</h5>
-                                <div class="d-flex mb-4">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <p class="mb-4">The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic words etc.</p>
-                                <p class="mb-4">Susp endisse ultricies nisi vel quam suscipit. Sabertooth peacock flounder; chain pickerel hatchetfish, pencilfish snailfish</p>
-                                <div class="input-group quantity mb-5" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
+                            <?php
+                            $host = "complist.mysql.database.azure.com";
+                            $user = "complist";
+                            $db_password = "ISI2023-2024";
+                            $db = "sabercomer";
+                            global $conexion;
+                            $conexion = new mysqli($host, $user, $db_password, $db);
+
+                            $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+
+                            if ($id) {
+                                $stmt = $conexion->prepare("SELECT * FROM comidas WHERE id = ?");
+                                $stmt->bind_param("i", $id);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+
+                                if ($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    echo '<div class="col-lg-6">
+                                            <h4 class="fw-bold mb-3">' . htmlspecialchars($row['Nombre']) . '</h4>
+                                            <p class="mb-3">Category: ' . htmlspecialchars($row['Tipo']) . '</p>
+                                            <h5 class="fw-bold mb-3">$' . htmlspecialchars($row['Precio']) . '</h5>
+                                            <div class="d-flex mb-4">
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <p class="mb-4">' . htmlspecialchars($row['Ingredientes']) . '</p>
+                                            <div class="input-group quantity mb-5" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+                                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                            </a>
+                                        </div>';
+                                } else {
+                                    echo '<p>Product not found.</p>';
+                                }
+                            } else {
+                                echo '<p>No product selected.</p>';
+                            }
+                            ?>
+
                             <div class="col-lg-12">
                                 <nav>
                                     <div class="nav nav-tabs mb-3">

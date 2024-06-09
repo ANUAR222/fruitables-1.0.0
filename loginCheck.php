@@ -20,7 +20,7 @@ if ($stmt) {
         if ($user) {
             $_SESSION['id'] = $user['id'];
             $_SESSION['correo'] = $username;
-            if ($admin===8) {
+            if ($admin) {
                 header('Location: indexAdmin.php');
             } else {
                 header('Location: index.php');

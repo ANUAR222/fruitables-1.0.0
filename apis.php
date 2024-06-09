@@ -301,7 +301,56 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['añadirCarrito'])){
 
     $stmt->close();
 }
+//decrementar cantidad
+if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['decrementarCantidad'])) {
+    // Obtener los datos del cuerpo de la solicitud
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id = $input['id'];
+    $id_usuario = $_SESSION['id'];
 
+    // Preparar la consulta SQL
+    $sql = "UPDATE carrito SET cantidad = cantidad - 1 WHERE id_comida = ? AND id_usuario = ?";
+    $stmt = $conexion->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("ii", $id, $id_usuario);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Update successful"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+        }
+
+        $stmt->close();
+    } else {
+        echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['eliminarCarrito'])) {
+    // Obtener los datos del cuerpo de la solicitud
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id = $input['id'];
+    $id_usuario = $_SESSION['id'];
+
+    // Preparar la consulta SQL
+    $sql = "DELETE FROM carrito WHERE id_comida=? AND id_usuario=?";
+    $stmt = $conexion->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("ii", $id, $id_usuario);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Delete successful"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+        }
+
+        $stmt->close();
+    } else {
+        echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
+    }
+}
 
 
 $conexion->close();

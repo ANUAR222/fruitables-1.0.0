@@ -23,18 +23,10 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
 </head>
-
 <body>
-<div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-    <div class="spinner-grow text-primary" role="status"></div>
-</div>
-<!-- Spinner End -->
-
-
 <!-- Navbar start -->
 <div class="container-fluid fixed-top">
     <div class="container topbar bg-primary d-none d-lg-block">
@@ -52,7 +44,7 @@
     </div>
     <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <a href="index.html" class="navbar-brand"><h1 class="text-primary display-6">SaberComer</h1></a>
+            <a href="index.php" class="navbar-brand"><h1 class="text-primary display-6">SaberComer</h1></a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars text-primary"></span>
             </button>
@@ -91,7 +83,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2>Login</h2>
-                <form id="login">
+                <form id="login" action="loginCheck.php" method="post">
                     <div class="form-group">
                         <label for="username">Username:</label>
                         <input type="text" class="form-control" id="username" name="username" required>
@@ -109,8 +101,7 @@
 </div>
 </div>
 </div>
-
-
+<script src="js/main.js"></script>
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -118,70 +109,6 @@
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-    <script>
-        /*if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['login'])) {
-    // Obtener los datos del cuerpo de la solicitud
-    $input = json_decode(file_get_contents('php://input'), true);
-    $username = $input['username'];
-    $password = $input['password'];
-
-    // Preparar la consulta SQL
-    $sql = "SELECT * FROM usuarios WHERE Nombre=? AND Contraseña=?";
-    $stmt = $conexion->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("ss", $username, $password);
-
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            $user = $result->fetch_assoc();
-
-            if ($user) {
-                echo json_encode(["status" => "success", "message" => "Login successful", "data" => $user]);
-            } else {
-                echo json_encode(["status" => "error", "message" => "Invalid username or password"]);
-            }
-        } else {
-            echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
-        }
-
-        $stmt->close();
-    } else {
-        echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
-    }
-}*/
-        document.getElementById("login").addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
-            var formData = JSON.stringify({
-                username: username,
-                password: password
-            });
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "apis.php?login", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        window.open("index.php", "_self");
-                    } else {
-                        alert("datos incorrectos");
-                        console.error("Error: " + response.error);
-                    }
-                } else {
-                    console.log(xhr.responseText);
-                }
-            };
-            xhr.send(formData);
-        });
-    </script>
 </body>
 
 </html>

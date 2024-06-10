@@ -455,6 +455,36 @@ require 'conexion.php';
         }
     </script>
         <script>
+            function aniadirCarrito(id){
+                var cantidad = 1;
+                var data = {
+                    id: id,
+                    cantidad: cantidad
+                };
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "apis.php?añadirCarrito", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            alert("Se añadio al carrito");
+                        } else {
+                            console.error("Error: ", response.message);
+                        }
+                    } else {
+                        console.error("Error: ", xhr.status);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            }
+            function ver_detalles(id){
+                window.location.href = "shop-detail.php?id="+id;
+            }
+            /*
+            esto no funciona bien
             function aniadirCarrito(id_comida) {
                 fetch('add_to_cart.php', {
                     method: 'POST',
@@ -474,7 +504,7 @@ require 'conexion.php';
                         }
                     })
                     .catch(error => console.error('Error:', error));
-            }
+            }*/
         </script>
 
 

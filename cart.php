@@ -317,7 +317,55 @@ $conexion->close();
             };
             xhr.send(JSON.stringify(data));
         }
+        function decrementarCantidad(id){
+            var cantidad = 1;
+            var data = {
+                id: id,
+                cantidad: cantidad
+            };
 
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "apis.php?decrementarCantidad", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        location.reload();
+                    } else {
+                        console.error("Error: ", response.message);
+                    }
+                } else {
+                    console.error("Error: ", xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+        function eliminarCarrito(id){
+            var data = {
+                id: id
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "apis.php?eliminarCarrito", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        location.reload();
+                    } else {
+                        console.error("Error: ", response.message);
+                    }
+                } else {
+                    console.error("Error: ", xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
     </script>
     </body>
 

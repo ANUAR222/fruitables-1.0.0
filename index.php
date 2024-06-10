@@ -1,6 +1,7 @@
 <?php
 require 'nav_bar.php';
 require 'conexion.php';
+session_start();
 ?>
 
 <!DOCTYPE html>

@@ -1,5 +1,6 @@
 <?php
-require 'nav_bar.php'
+require 'nav_bar.php';
+require 'conexion.php';
 ?>
 
 <!DOCTYPE html>
@@ -44,10 +45,15 @@ require 'nav_bar.php'
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1" />
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <form action="shop.php" method="GET" class="d-flex w-100">
+                                <input type="search" name="query" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                                <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -268,24 +274,26 @@ require 'nav_bar.php'
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo '<div class="col-md-6 col-lg-6 col-xl-4">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <img src="img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                                                </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>'.$row['Nombre'].'</h4>
-                                                    <p>'.$row['Ingredientes'].'</p>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
-                                                        <a onclick="aniadirCarrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
-                                                        <a onclick="ver_detalles('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Ver detalles</a>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>';}
+        <div class="rounded position-relative fruite-item">
+            <div class="fruite-img">
+                <img src="img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
+            </div>
+            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
+            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                <h4>'.$row['Nombre'].'</h4>
+                <p>'.$row['Ingredientes'].'</p>
+                <div class="d-flex justify-content-between flex-lg-wrap">
+                    <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
+                    <a onclick="aniadirCarrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
+                    <a onclick="ver_detalles('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Ver detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>';
+                                        }
                                     }
                                     ?>
+
                                     <div class="col-12">
                                         <div class="pagination d-flex justify-content-center mt-5">
                                             <a href="#" class="rounded">&laquo;</a>
@@ -446,6 +454,30 @@ require 'nav_bar.php'
             window.location.href = "shop-detail.php?id="+id;
         }
     </script>
+        <script>
+            function aniadirCarrito(id_comida) {
+                fetch('add_to_cart.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_comida: id_comida })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Producto añadido al carrito');
+                            // Actualiza el número de artículos en el carrito
+                            document.getElementById('cart-count').innerText = data.total_items;
+                        } else {
+                            alert('Error al añadir el producto al carrito: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        </script>
+
+
     </body>
 
 </html>

@@ -1,6 +1,7 @@
 
 <?php
-require 'nav_bar.php'
+require 'nav_bar.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,26 +88,35 @@ require 'nav_bar.php'
                         </thead>
                         <tbody id="carrito">
 
-                            <?php
-                            $host = "complist.mysql.database.azure.com";
-                            $user = "complist";
-                            $db_password = "ISI2023-2024";
-                            $db = "sabercomer";
-                            global $conexion;
-                            $conexion = new mysqli($host, $user, $db_password, $db);
+                        <?php
+                        session_start(); // Asegúrate de que la sesión esté iniciada
 
-                            $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
-$sql = "SELECT * FROM  comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param("i", $id_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($comida = $result->fetch_assoc()) {
-    echo '
+                        $host = "complist.mysql.database.azure.com";
+                        $user = "complist";
+                        $db_password = "ISI2023-2024";
+                        $db = "sabercomer";
+                        global $conexion;
+                        $conexion = new mysqli($host, $user, $db_password, $db);
+
+                        $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
+
+                        // Consulta para obtener los detalles del carrito
+                        $sql = "SELECT comidas.*, carrito.cantidad FROM comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";
+                        $stmt = $conexion->prepare($sql);
+                        $stmt->bind_param("i", $id_usuario);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        // Inicializa el contador de artículos
+                        $total_items = 0;
+
+                        while ($comida = $result->fetch_assoc()) {
+                            $total_items += $comida['cantidad'];
+                            echo '
     <tr>
         <th scope="row">
             <div class="d-flex align-items-center">
-                <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
+                <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
             </div>
         </th>
         <td>
@@ -118,32 +128,36 @@ while ($comida = $result->fetch_assoc()) {
         <td>
             <div class="input-group quantity mt-4" style="width: 100px;">
                 <div class="input-group-btn">
-                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                     <i class="fa fa-minus"></i>
                     </button>
                 </div>
                 <input type="text" class="form-control form-control-sm text-center border-0" value="' . $comida['cantidad'] . '">
                 <div class="input-group-btn">
-                    <button onclick="aniadirCarrito('.$comida['id'].')" class="btn btn-sm btn-plus rounded-circle bg-light border">
-                        <i class="fa fa-plus "></i>
+                    <button onclick="aniadirCarrito(' . $comida['id'] . ')" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                        <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
         </td>
         <td>
-            <p class="mb-0 mt-4" id="precio">' . $comida['Precio'] * $comida['cantidad'] . ' $</p>
+            <p class="mb-0 mt-4" id="precio">' . ($comida['Precio'] * $comida['cantidad']) . ' $</p>
         </td>
         <td>
-            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+            <button class="btn btn-md rounded-circle bg-light border mt-4">
                 <i class="fa fa-times text-danger"></i>
             </button>
         </td>
     </tr>';
-}
-$stmt->close();
-$conexion->close();
+                        }
 
-                            ?>
+                        $stmt->close();
+                        $conexion->close();
+
+                        // Guarda el número total de artículos en la sesión
+                        $_SESSION['total_items'] = $total_items;
+                        ?>
+
 
                         </tbody>
                     </table>

@@ -107,25 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['login'])) {
         echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
     }
 }
-/*create table cliente
-(
-    id           int auto_increment
-        primary key,
-    id_usuario   int not null,
-    id_datosPago int null,
-    constraint cliente_ibfk_1
-        foreign key (id_usuario) references usuario (id),
-    constraint cliente_ibfk_2
-        foreign key (id_datosPago) references datospago (id)
-);create table usuario
-(
-    id         int auto_increment
-        primary key,
-    email      varchar(100) not null,
-    contraseña varchar(100) not null,
-    fecha_alta datetime     not null,
-    fecha_baja datetime     null
-);*/
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['registro'])) {
     // Get the data from the request body

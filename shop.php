@@ -423,7 +423,7 @@ require 'conexion.php';
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-    <script>
+     <script>
         function aniadirCarrito(id){
     var cantidad = 1;
     var data = {

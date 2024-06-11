@@ -7,6 +7,9 @@ require 'conexion.php';
 <html lang="en">
 
 <head>
+    <style>
+
+    </style>
     <meta charset="utf-8">
     <title>Perfil de Usuario</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -95,43 +98,44 @@ require 'conexion.php';
                     <div class="col-lg-9">
                         <div class="row g-4 justify-content-center">
                             <?php
-                            $host = "complist.mysql.database.azure.com";
-                            $user = "complist";
-                            $db_password = "ISI2023-2024";
-                            $db = "sabercomer";
-                            global $conexion;
-                            $conexion = new mysqli($host, $user, $db_password, $db);
-                            if (!$conexion) {
-                                echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-                                echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
-                                echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
-                                exit;
-                            }
                             $sql = "SELECT * FROM comidas";
                             $result = $conexion->query($sql);
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
+                                    $nombre = $row['Nombre'];
+                                    $precio = $row['Precio'];
+                                    $ingredientes = $row['Ingredientes'];
+                                    $id = $row['id'];
                                     echo '<div class="col-md-6 col-lg-6 col-xl-4">
                                     <div class="rounded position-relative fruite-item">
-                                        <div class="fruite-img">
-                                            <img src="img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                                        </div>
+                                        <div class="fruite-img">';
+                                            $sql2 = "SELECT * FROM imagenes WHERE IDComida = '$id'";
+                                            $result2 = $conexion->query($sql2);
+                                            if($result2->num_rows > 0) {
+                                                $row2 = $result2->fetch_assoc();
+                                                $imagen = base64_encode($row2['imagen']);
+                                                echo "<img src='data:image/jpg;base64,$imagen' id='imagen' class='img-fluid w-100 rounded-top' alt=''>";
+                                            }
+                                            else{
+                                                echo "<img src='img/single-item.jpg' class='img-fluid w-100 rounded-top' alt=''>";
+                                            }
+                                            echo '</div>
                                         <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                                         <div class="p-4 border
                                         border-secondary border-top-0 rounded-bottom">
-                                            <h4>'.$row['Nombre'].'</h4>
-                                            <p>'.$row['Ingredientes'].'</p>
+                                            <h4>'.$nombre.'</h4>
+                                            <p>'.$ingredientes.'</p>
                                             <div class="d-flex justify-content-between flex-lg-wrap">
-                                                <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
-                                                <a onclick="editar('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Editar Producto</a>
-                                                <a onclick="eliminar('.$row['id'].')" class="btn btn-danger rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> Eliminar</a>
+                                                <p class="text-dark fs-5 fw-bold mb-0">$'.$precio.'</p>
+                                                <a onclick="editar('.$id.')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Editar Producto</a>
+                                                <a onclick="eliminar('.$id.')" class="btn btn-danger rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> Eliminar</a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>';}
+                                </div>';
+                                }
                             }
                             ?>
-
                             <div class="col-12">
                                 <div class="pagination d-flex justify-content-center mt-5">
                                     <a href="#" class="rounded">&laquo;</a>

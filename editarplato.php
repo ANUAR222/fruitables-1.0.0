@@ -6,6 +6,12 @@ require 'nav_bar.php'
 <html lang="en">
 
 <head>
+    <style>
+        #imagen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
     <meta charset="utf-8">
     <title>Perfil de Usuario</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -60,7 +66,7 @@ require 'nav_bar.php'
         <li class="breadcrumb-item active text-white">Shop</li>
     </ol>
 </div>
-
+<form id="editar" action="gestionEditarPlato.php" method="post" enctype="multipart/form-data">
 <div class="container-fluid py-5 mt-5">
     <div class="container py-5">
         <div class="row g-4 mb-5">
@@ -69,11 +75,27 @@ require 'nav_bar.php'
                     <div class="col-lg-6">
                         <div class="border rounded">
                             <a href="#">
-                                <img src="img/single-item.jpg" class="img-fluid rounded" alt="Image">
+                                <?php
+                                require 'conexion.php';
+                                $id = $_GET['id'];
+                                $sql = "SELECT * FROM imagenes WHERE IDComida = '$id'";
+                                $result = $conexion->query($sql);
+                                if($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    $imagen = base64_encode($row['imagen']);
+                                    echo "<img src='data:image/jpg;base64,$imagen' id='imagen' class='img-fluid rounded' alt='Image'>";
+                                }
+                                else{
+                                    echo "<img src='img/single-item.jpg' class='img-fluid rounded' alt='Image'>";
+                                }
+                                ?>
 
                             </a>
+
                         </div>
+
                     </div>
+                    <input type="file"  class="btn btn-primary" name="imagenes" accept="image/jpeg, image/png, image/jpg">
                     <!-- create table comidas
 (
     id               int auto_increment
@@ -87,7 +109,6 @@ require 'nav_bar.php'
     Tipo             enum ('Entrante', 'Principal', 'Postre') not null
 ); -->
                     <?php
-                    require 'conexion.php';
                     $id = $_GET['id'];
                     $sql = "SELECT * FROM comidas WHERE id = $id";
                     $result = $conexion->query($sql);
@@ -96,7 +117,9 @@ require 'nav_bar.php'
                     $category = $row['Tipo'];
                     $precio = $row['Precio'];
                     $descripcion = $row['Ingredientes'];
-                    $stock = $row['Peso'];
+                    $stock = $row['Stock'];
+                    $peso = $row['Peso'];
+                    $calorias = $row['Calorías'];
                     $tipoenum = ['Entrante', 'Principal', 'Postre'];
                     forEach($tipoenum as $tipo) {
                         if ($tipo == $category) {
@@ -109,11 +132,11 @@ require 'nav_bar.php'
                                     <h2 class='mb-4'>Editar Plato</h2>
                                     <div class='mb-3'>
                                         <label for='nombre' class='form-label'>Nombre</label>
-                                        <input type='text' class='form-control' id='nombre' placeholder='Nombre' value='$nombre'>
+                                        <input type='text' class='form-control' name='nombre' placeholder='Nombre' value='$nombre'>
                                     </div>
                                     <div class='mb-3'>
                                         <label for='Category' class='form-label'>Category</label>
-                                        <select>
+                                        <select name='Category'>
                                             <option value='$category'>Entrante</option>";
                                             foreach($tipoenum as $tipo) {
                                                 echo "<option value='$tipo'>$tipo</option>";
@@ -122,28 +145,40 @@ require 'nav_bar.php'
                                     </div>
                                     <div class='mb-3'>
                                         <label for='precio' class='form-label'>Precio</label>
-                                        <input type='text' class='form-control' id='precio' placeholder='Precio' value='$precio'>
+                                        <input type='text' class='form-control' name='precio' placeholder='Precio' value='$precio'>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='peso' class='form-label'>Peso</label>
+                                        <input type='text' class='form-control' name='peso' placeholder='Peso' value='$peso'>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='calorias' class='form-label'>Calorías</label>
+                                        <input type='text' class='form-control' name='calorias' placeholder='Precio' value='$calorias'>
                                     </div>
                                     <div class='mb-3'>
                                         <label for='decripcion' class='form-label'>Descripción</label>
-                                        <textarea class='form-control' id='decripcion' rows='3' placeholder='Descripción' >$descripcion</textarea>
+                                        <textarea class='form-control' name='descripcion' rows='3' placeholder='Descripción' >$descripcion</textarea>
                                     </div>
                                     <div class='mb-3'>
-                                        <label for='stok' class='form-label'>Stock</label>
-                                        <input type='text' class='form-control' id='stok' placeholder='Stock' value='$stock'>
+                                        <label for='stock' class='form-label'>Stock</label>
+                                        <input type='text' class='form-control' name='stock' placeholder='Stock' value='$stock'>
                                     </div>
+                                    
+                                    <input type='hidden' class='form-control' name='id' value='$id'>
+                                    
                                 </div>
                             </div>";
+                                $conexion->close();
                     ?>
                         <!-- Botones de edición y eliminación -->
-                        <a id="editar" onclick="editar()" class="btn btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-edit me-2"></i> Editar</a>
+                        <button type="submit" id="editar" class="btn btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-edit me-2"></i> Editar</button>
                         <a onclick="aniadir()" class="btn  btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> añadir</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 
 
@@ -203,14 +238,15 @@ require 'nav_bar.php'
         var stock = document.getElementById("stok").value;
         // Obtén la id en la URL
         var id = window.location.search.split('=')[1];
-
+        var imagen = document.getElementById("imagenCamb").value;
         var data = {
             id: id,
             nombre: nombre,
             category: category, // Cambié 'Category' a 'category'
             precio: precio,
             descripcion: descripcion, // Cambié 'decripcion' a 'descripcion'
-            stock: stock
+            stock: stock,
+            imagen: imagen
         };
 
         console.log(data); // Log the data to the console

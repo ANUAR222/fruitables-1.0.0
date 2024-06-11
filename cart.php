@@ -3,7 +3,19 @@
 require 'nav_bar.php';
 require 'conexion.php';
 session_start();
+
+// Contar el total de ítems en el carrito
+$total_items = 0;
+if (isset($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $total_items += $item['quantity'];
+    }
+    $_SESSION['total_items'] = $total_items;
+} else {
+    $_SESSION['total_items'] = 0;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -47,8 +47,12 @@ require 'nav_bar.php'
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <form action="shop.php" method="GET" class="d-flex w-100">
+                                <input type="search" name="query" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                                <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -135,101 +139,94 @@ require 'nav_bar.php'
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
-                                        <tr>
-                                            <th scope="col">Products</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Total</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col">Products</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center mt-2">
-                                                    <img src="img/vegetable-item-2.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
-                                                </div>
-                                            </th>
-                                            <td class="py-5">Awesome Brocoli</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center mt-2">
-                                                    <img src="img/vegetable-item-5.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
-                                                </div>
-                                            </th>
-                                            <td class="py-5">Potatoes</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center mt-2">
-                                                    <img src="img/vegetable-item-3.png" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
-                                                </div>
-                                            </th>
-                                            <td class="py-5">Big Banana</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                            </th>
-                                            <td class="py-5"></td>
-                                            <td class="py-5"></td>
-                                            <td class="py-5">
-                                                <p class="mb-0 text-dark py-3">Subtotal</p>
-                                            </td>
-                                            <td class="py-5">
-                                                <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">$414.00</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                            </th>
-                                            <td class="py-5">
-                                                <p class="mb-0 text-dark py-4">Shipping</p>
-                                            </td>
-                                            <td colspan="3" class="py-5">
-                                                <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
-                                                    <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                                                </div>
-                                                <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                                    <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                                                </div>
-                                                <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                                    <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                            </th>
-                                            <td class="py-5">
-                                                <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
-                                            </td>
-                                            <td class="py-5"></td>
-                                            <td class="py-5"></td>
-                                            <td class="py-5">
-                                                <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">$135.00</p>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <?php
+                                    //session_start(); // Asegúrate de que la sesión esté iniciada
+
+                                    $host = "complist.mysql.database.azure.com";
+                                    $user = "complist";
+                                    $db_password = "ISI2023-2024";
+                                    $db = "sabercomer";
+                                    global $conexion;
+                                    $conexion = new mysqli($host, $user, $db_password, $db);
+
+                                    $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
+
+                                    // Consulta para obtener los detalles del carrito
+                                    $sql = "SELECT comidas.*, carrito.cantidad FROM comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";
+                                    $stmt = $conexion->prepare($sql);
+                                    $stmt->bind_param("i", $id_usuario);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+
+                                    // Inicializa el subtotal
+                                    $subtotal = 0;
+
+                                    while ($comida = $result->fetch_assoc()) {
+                                        $total_item = $comida['Precio'] * $comida['cantidad'];
+                                        $subtotal += $total_item;
+                                        echo '
+                <tr>
+                    <th scope="row">
+                        <div class="d-flex align-items-center">
+                            <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                        </div>
+                    </th>
+                    <td>
+                        <p class="mb-0 mt-4">' . $comida['Nombre'] . '</p>
+                    </td>
+                    <td>
+                        <p class="mb-0 mt-4">' . $comida['Precio'] . ' $</p>
+                    </td>
+                    <td>
+                        <div class="input-group quantity mt-4" style="width: 100px;">
+                            <input type="text" class="form-control form-control-sm text-center border-0" value="' . $comida['cantidad'] . '">
+                        </div>
+                    </td>
+                    <td>
+                        <p class="mb-0 mt-4" id="precio">' . $total_item . ' $</p>
+                    </td>
+                </tr>';
+                                    }
+
+                                    $stmt->close();
+                                    $conexion->close();
+
+                                    // Define el coste de envío
+                                    $shipping_cost = 3.00;
+
+                                    // Calcula el total final
+                                    $total = $subtotal + $shipping_cost;
+
+                                    ?>
                                     </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Subtotal:</td>
+                                        <td><?php echo number_format($subtotal, 2); ?> $</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Shipping:</td>
+                                        <td><?php echo number_format($shipping_cost, 2); ?> $</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Total:</td>
+                                        <td><?php echo number_format($total, 2); ?> $</td>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                        </div>
+
+                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
                                         <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1" name="Transfer" value="Transfer">

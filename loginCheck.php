@@ -6,7 +6,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 // Preparar la consulta SQL
-$sql = "SELECT * FROM usuario LEFT JOIN adiministrador ON usuario.id=adiministrador.id_usuario WHERE usuario.email=? AND usuario.contraseña=?";
+$sql = "SELECT usuario.id as idUsuario, usuario.email as correo,adiministrador.id_usuario as id_usuario FROM usuario LEFT JOIN adiministrador ON usuario.id=adiministrador.id_usuario WHERE usuario.email=? AND usuario.contraseña=?";
 $stmt = $conexion->prepare($sql);
 
 
@@ -18,7 +18,7 @@ if ($stmt) {
         $user = $result->fetch_assoc();
         $admin = $user['id_usuario'];
         if ($user) {
-            $_SESSION['id'] = $user['id'];
+            $_SESSION['id'] = $user['idUsuario'];
             $_SESSION['correo'] = $username;
             if ($admin) {
                 header('Location: indexAdmin.php');

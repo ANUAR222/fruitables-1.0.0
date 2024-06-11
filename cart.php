@@ -129,14 +129,14 @@ session_start();
         <td>
             <div class="input-group quantity mt-4" style="width: 100px;">
                 <div class="input-group-btn">
-                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                    <button onclick="decrementarCantidad('.$comida['id'].')" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                     <i class="fa fa-minus"></i>
                     </button>
                 </div>
                 <input type="text" class="form-control form-control-sm text-center border-0" value="' . $comida['cantidad'] . '">
                 <div class="input-group-btn">
-                    <button onclick="aniadirCarrito(' . $comida['id'] . ')" class="btn btn-sm btn-plus rounded-circle bg-light border">
-                        <i class="fa fa-plus"></i>
+                    <button onclick="aniadirCarrito('.$comida['id'].')" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                        <i class="fa fa-plus "></i>
                     </button>
                 </div>
             </div>
@@ -145,7 +145,7 @@ session_start();
             <p class="mb-0 mt-4" id="precio">' . ($comida['Precio'] * $comida['cantidad']) . ' $</p>
         </td>
         <td>
-            <button class="btn btn-md rounded-circle bg-light border mt-4">
+            <button onclick="eliminarCarrito('.$comida['id'].')" class="btn btn-md rounded-circle bg-light border mt-4" >
                 <i class="fa fa-times text-danger"></i>
             </button>
         </td>

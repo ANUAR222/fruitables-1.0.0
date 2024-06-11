@@ -86,30 +86,55 @@ require 'nav_bar.php'
     Valoración_media decimal(3, 2)                            null,
     Tipo             enum ('Entrante', 'Principal', 'Postre') not null
 ); -->
-                    <div class="col-lg-6">
-                        <div class="border rounded p-4">
-                            <h2 class="mb-4">Editar Plato</h2>
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Nombre">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Category" class="form-label">Category</label>
-                                <input type="text" class="form-control" id="Category" placeholder="Category">
-                            </div>
-                            <div class="mb-3">
-                                <label for="precio" class="form-label">Precio</label>
-                                <input type="text" class="form-control" id="precio" placeholder="Precio">
-                            </div>
-                            <div class="mb-3">
-                                <label for="decripcion" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="decripcion" rows="3" placeholder="Descripción"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="stok" class="form-label">Stock</label>
-                                <input type="text" class="form-control" id="stok" placeholder="Stock">
-                            </div>
-                        </div>
+                    <?php
+                    require 'conexion.php';
+                    $id = $_GET['id'];
+                    $sql = "SELECT * FROM comidas WHERE id = $id";
+                    $result = $conexion->query($sql);
+                    $row = $result->fetch_assoc();
+                    $nombre = $row['Nombre'];
+                    $category = $row['Tipo'];
+                    $precio = $row['Precio'];
+                    $descripcion = $row['Ingredientes'];
+                    $stock = $row['Peso'];
+                    $tipoenum = ['Entrante', 'Principal', 'Postre'];
+                    forEach($tipoenum as $tipo) {
+                        if ($tipo == $category) {
+                            //delete
+                            unset($tipoenum[array_search($tipo, $tipoenum)]);
+                        }
+                    };
+                    echo "<div class='col-lg-6'>
+                                <div class='border rounded p-4'>
+                                    <h2 class='mb-4'>Editar Plato</h2>
+                                    <div class='mb-3'>
+                                        <label for='nombre' class='form-label'>Nombre</label>
+                                        <input type='text' class='form-control' id='nombre' placeholder='Nombre' value='$nombre'>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='Category' class='form-label'>Category</label>
+                                        <select>
+                                            <option value='$category'>Entrante</option>";
+                                            foreach($tipoenum as $tipo) {
+                                                echo "<option value='$tipo'>$tipo</option>";
+                                            }
+                                        echo "</select>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='precio' class='form-label'>Precio</label>
+                                        <input type='text' class='form-control' id='precio' placeholder='Precio' value='$precio'>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='decripcion' class='form-label'>Descripción</label>
+                                        <textarea class='form-control' id='decripcion' rows='3' placeholder='Descripción' >$descripcion</textarea>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='stok' class='form-label'>Stock</label>
+                                        <input type='text' class='form-control' id='stok' placeholder='Stock' value='$stock'>
+                                    </div>
+                                </div>
+                            </div>";
+                    ?>
                         <!-- Botones de edición y eliminación -->
                         <a id="editar" onclick="editar()" class="btn btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-edit me-2"></i> Editar</a>
                         <a onclick="aniadir()" class="btn  btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> añadir</a>

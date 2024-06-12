@@ -76,129 +76,99 @@ require 'nav_bar.php'
         <!-- Checkout Page Start -->
         <div class="container-fluid py-5">
             <div class="container py-5">
-                <h1 class="mb-4">Billing details</h1>
-                <form action="gestionar_checkout.php" method="POST">
+                <h1 class="mb-4">Resumen del Pedido</h1>
+                <form id="checkout-form" action="gestionar_checkout.php" method="POST">
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="form-item w-100">
-                                        <label class="form-label my-3">First Name<sup>*</sup></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="form-item w-100">
-                                        <label class="form-label my-3">Last Name<sup>*</sup></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
+                            <?php
+                            session_start(); // Asegúrate de que la sesión esté iniciada
+
+                            $host = "complist.mysql.database.azure.com";
+                            $user = "complist";
+                            $db_password = "ISI2023-2024";
+                            $db = "sabercomer";
+                            $conexion = new mysqli($host, $user, $db_password, $db);
+
+                            $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
+
+                            // Obtener datos del cliente
+                            $sql_cliente = "SELECT cliente.nombre, datospago.Domicilio, datospago.Número_tarjeta, datospago.Teléfono 
+                                    FROM cliente 
+                                    JOIN datospago ON cliente.id_datosPago = datospago.id 
+                                    WHERE cliente.id_usuario = ?";
+                            $stmt_cliente = $conexion->prepare($sql_cliente);
+                            $stmt_cliente->bind_param("i", $id_usuario);
+                            $stmt_cliente->execute();
+                            $result_cliente = $stmt_cliente->get_result();
+                            $cliente = $result_cliente->fetch_assoc();
+
+                            // Mostrar datos del cliente
+                            echo '
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-item">
+                                <label class="form-label my-3">Nombre:</label>
+                                <p id="nombre">' . $cliente['nombre'] . '</p>
                             </div>
                             <div class="form-item">
-                                <label class="form-label my-3">Company Name<sup>*</sup></label>
-                                <input type="text" class="form-control">
+                                <label class="form-label my-3">Domicilio:</label>
+                                <p id="domicilio">' . $cliente['Domicilio'] . '</p>
                             </div>
                             <div class="form-item">
-                                <label class="form-label my-3">Address <sup>*</sup></label>
-                                <input type="text" class="form-control" placeholder="House Number Street Name">
+                                <label class="form-label my-3">Número de Tarjeta:</label>
+                                <p id="numero_tarjeta">' . $cliente['Número_tarjeta'] . '</p>
                             </div>
                             <div class="form-item">
-                                <label class="form-label my-3">Town/City<sup>*</sup></label>
-                                <input type="text" class="form-control">
+                                <label class="form-label my-3">Teléfono:</label>
+                                <p id="telefono">' . $cliente['Teléfono'] . '</p>
                             </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Country<sup>*</sup></label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Mobile<sup>*</sup></label>
-                                <input type="tel" class="form-control">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Email Address<sup>*</sup></label>
-                                <input type="email" class="form-control">
-                            </div>
-                            <div class="form-check my-3">
-                                <input type="checkbox" class="form-check-input" id="Account-1" name="Accounts" value="Accounts">
-                                <label class="form-check-label" for="Account-1">Create an account?</label>
-                            </div>
-                            <hr>
-                            <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address">
-                                <label class="form-check-label" for="Address-1">Ship to a different address?</label>
-                            </div>
-                            <div class="form-item">
-                                <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Oreder Notes (Optional)"></textarea>
-                            </div>
+                        </div>
+                    </div>';
+
+                            $stmt_cliente->close();
+                            ?>
                         </div>
                         <div class="col-md-12 col-lg-6 col-xl-5">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Products</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Imagen</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Precio</th>
+                                        <th scope="col">Cantidad</th>
                                         <th scope="col">Total</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    //session_start(); // Asegúrate de que la sesión esté iniciada
-
-                                    $host = "complist.mysql.database.azure.com";
-                                    $user = "complist";
-                                    $db_password = "ISI2023-2024";
-                                    $db = "sabercomer";
-                                    global $conexion;
-                                    $conexion = new mysqli($host, $user, $db_password, $db);
-
-                                    $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
-
                                     // Consulta para obtener los detalles del carrito
-                                    $sql = "SELECT comidas.*, carrito.cantidad FROM comidas LEFT JOIN carrito ON carrito.id_comida = comidas.id WHERE id_usuario = ?";
-                                    $stmt = $conexion->prepare($sql);
-                                    $stmt->bind_param("i", $id_usuario);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
+                                    $sql_carrito = "SELECT comidas.*, carrito.cantidad 
+                                                FROM comidas 
+                                                LEFT JOIN carrito ON carrito.id_comida = comidas.id 
+                                                WHERE id_usuario = ?";
+                                    $stmt_carrito = $conexion->prepare($sql_carrito);
+                                    $stmt_carrito->bind_param("i", $id_usuario);
+                                    $stmt_carrito->execute();
+                                    $result_carrito = $stmt_carrito->get_result();
 
                                     // Inicializa el subtotal
                                     $subtotal = 0;
 
-                                    while ($comida = $result->fetch_assoc()) {
+                                    while ($comida = $result_carrito->fetch_assoc()) {
                                         $total_item = $comida['Precio'] * $comida['cantidad'];
                                         $subtotal += $total_item;
                                         echo '
-                <tr>
-                    <th scope="row">
-                        <div class="d-flex align-items-center">
-                            <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                        </div>
-                    </th>
-                    <td>
-                        <p class="mb-0 mt-4">' . $comida['Nombre'] . '</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">' . $comida['Precio'] . ' $</p>
-                    </td>
-                    <td>
-                        <div class="input-group quantity mt-4" style="width: 100px;">
-                            <input type="text" class="form-control form-control-sm text-center border-0" value="' . $comida['cantidad'] . '">
-                        </div>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4" id="precio">' . $total_item . ' $</p>
-                    </td>
-                </tr>';
+                                    <tr>
+                                        <td><img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt=""></td>
+                                        <td>' . $comida['Nombre'] . '</td>
+                                        <td>' . $comida['Precio'] . ' $</td>
+                                        <td>' . $comida['cantidad'] . '</td>
+                                        <td>' . $total_item . ' $</td>
+                                    </tr>';
                                     }
 
-                                    $stmt->close();
-                                    $conexion->close();
+                                    $stmt_carrito->close();
 
                                     // Define el coste de envío
                                     $shipping_cost = 3.00;
@@ -206,6 +176,7 @@ require 'nav_bar.php'
                                     // Calcula el total final
                                     $total = $subtotal + $shipping_cost;
 
+                                    $conexion->close();
                                     ?>
                                     </tbody>
                                     <tfoot>
@@ -214,7 +185,7 @@ require 'nav_bar.php'
                                         <td><?php echo number_format($subtotal, 2); ?> $</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end">Shipping:</td>
+                                        <td colspan="4" class="text-end">Envío:</td>
                                         <td><?php echo number_format($shipping_cost, 2); ?> $</td>
                                     </tr>
                                     <tr>
@@ -225,48 +196,34 @@ require 'nav_bar.php'
                                 </table>
                             </div>
                         </div>
-
-                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1" name="Transfer" value="Transfer">
-                                        <label class="form-check-label" for="Transfer-1">Direct Bank Transfer</label>
-                                    </div>
-                                    <p class="text-start text-dark">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
-                                </div>
-                            </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1" name="Payments" value="Payments">
-                                        <label class="form-check-label" for="Payments-1">Check Payments</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
-                                        <label class="form-check-label" for="Delivery-1">Cash On Delivery</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
-                                        <label class="form-check-label" for="Paypal-1">Paypal</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                                <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
-                            </div>
+                        <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                            <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
                         </div>
                     </div>
+                </form>
             </div>
         </div>
         <!-- Checkout Page End -->
+
+        <script>
+            document.getElementById('checkout-form').addEventListener('submit', function(event) {
+                const nombre = document.getElementById('nombre').innerText.trim();
+                const domicilio = document.getElementById('domicilio').innerText.trim();
+                const numero_tarjeta = document.getElementById('numero_tarjeta').innerText.trim();
+                const telefono = document.getElementById('telefono').innerText.trim();
+
+                if (!nombre || !domicilio || !numero_tarjeta || !telefono) {
+                    event.preventDefault();
+                    alert('Por favor, complete todos los campos requeridos.');
+                    return false;
+                }
+
+                alert('Pedido realizado');
+            });
+        </script>
+
+
+
 
 
         <!-- Footer Start -->

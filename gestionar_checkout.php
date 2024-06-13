@@ -42,7 +42,8 @@ if ($stmt) {
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
 
-        echo json_encode(["status" => "success", "message" => "Order placed successfully"]);
+        // Redirigir a la página de historial de pedidos
+        header("Location: pedidos.php");
     } else {
         echo json_encode(["status" => "error", "message" => "Error al procesar el pedido"]);
     }

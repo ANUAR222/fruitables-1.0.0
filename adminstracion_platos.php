@@ -78,7 +78,7 @@ require 'conexion.php';
                         </div>
                         <!--añade un boton para añadir un plato-->
                         <div class="d-flex justify-content-center mt-4">
-                            <a onclick="window.location.href = 'editarplato.php'" class="btn btn-primary">Añadir Plato</a>
+                            <a onclick="window.location.href = 'aniadirplato.php'" class="btn btn-primary">Añadir Plato</a>
                         </div>
                     </div>
                     <div class="col-6"></div>

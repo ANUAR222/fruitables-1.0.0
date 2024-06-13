@@ -172,7 +172,6 @@ require 'nav_bar.php'
                     ?>
                         <!-- Botones de edición y eliminación -->
                         <button type="submit" id="editar" class="btn btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-edit me-2"></i> Editar</button>
-                        <a onclick="aniadir()" class="btn  btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> añadir</a>
                     </div>
                 </div>
             </div>

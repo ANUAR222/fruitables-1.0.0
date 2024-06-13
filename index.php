@@ -1,7 +1,6 @@
 <?php
 require 'nav_bar.php';
 require 'conexion.php';
-session_start();
 ?>
 
 <!DOCTYPE html>
@@ -168,38 +167,62 @@ session_start();
                             <div class="row g-4">
                                 <div class="col-lg-12">
                                     <div class="row g-4">
-                                            <?php
-                                            $host = "complist.mysql.database.azure.com";
-                                            $user = "complist";
-                                            $db_password = "ISI2023-2024";
-                                            $db = "sabercomer";
-                                            global $conexion;
-                                            $conexion = new mysqli($host, $user, $db_password, $db);
+                                        <?php
+                                        $host = "complist.mysql.database.azure.com";
+                                        $user = "complist";
+                                        $db_password = "ISI2023-2024";
+                                        $db = "sabercomer";
+                                        global $conexion;
+                                        $conexion = new mysqli($host, $user, $db_password, $db);
 
-                                            $sql = "SELECT * FROM comidas";
-                                            $result = $conexion->query($sql);
+                                        $query = isset($_GET['query']) ? $_GET['query'] : null;
 
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo '
-                        <div class="col-md-6 col-lg-4 col-xl-3">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <img src="img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                                                </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>'.$row['Nombre'].'</h4>
-                                                    <p>'.$row['Ingredientes'].'</p>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
-                                                        <a onclick="añadir_al_carrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
-                                                        <a onclick="ver_detalles('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Ver detalles</a>
-                                                        </div>
-                                                </div>
-                                           </div></div>';}
+                                        $sql = "SELECT * FROM comidas";
+                                        $result = $conexion->query($sql);
+
+                                        if ($query) {
+                                            $stmt = $conexion->prepare("SELECT * FROM comidas WHERE Nombre LIKE ?");
+                                            $search = "%{$query}%";
+                                            $stmt->bind_param("s", $search);
+                                        } else {
+                                            $stmt = $conexion->prepare("SELECT * FROM comidas");
+                                        }
+
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $sql = "SELECT * FROM imagenes WHERE IDComida = ".$row['id'];
+                                                $result_img = $conexion->query($sql);
+                                                if($result_img->num_rows > 0) {
+                                                    $row2 = $result_img->fetch_assoc();
+                                                    $imagen = base64_encode($row2['imagen']);
+                                                    $img_src = "data:image/jpg;base64,$imagen";
+                                                } else {
+                                                    $img_src = "img/single-item.jpg";
+                                                }
+
+                                                echo '<div class="col-md-5 col-lg-5 col-xl-3">
+        <div class="rounded position-relative fruite-item">
+            <div class="fruite-img">
+                <img src="'.$img_src.'" id="imagen" class="img-fluid w-100 rounded-top"  alt="Image">
+            </div>
+            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
+            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                <h4>'.$row['Nombre'].'</h4>
+                <p>'.$row['Ingredientes'].'</p>
+                <div class="d-flex justify-content-between flex-lg-wrap">
+                    <p class="text-dark fs-5 fw-bold mb-0">$'.$row['Precio'].'</p>
+                    <a onclick="aniadirCarrito('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Añadir al carrito</a>
+                    <a onclick="ver_detalles('.$row['id'].')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Ver detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>';
                                             }
-                                            ?>
+                                        }
+                                        ?>
 
                                         <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded position-relative fruite-item">
@@ -969,7 +992,90 @@ session_start();
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            function aniadirCarrito(id){
+                var cantidad = 1;
+                var data = {
+                    id: id,
+                    cantidad: cantidad
+                };
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "apis.php?añadirCarrito", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            alert("Se añadio al carrito");
+                        } else {
+                            console.error("Error: ", response.message);
+                        }
+                    } else {
+                        console.error("Error: ", xhr.status);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            }
+            function ver_detalles(id){
+                console.log("sksl")
+                window.location.href = "shop-detail.php?id="+id;
+            }
+        </script>
+        <script>
+            function aniadirCarrito(id){
+                var cantidad = 1;
+                var data = {
+                    id: id,
+                    cantidad: cantidad
+                };
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "apis.php?añadirCarrito", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            alert("Se añadio al carrito");
+                        } else {
+                            console.error("Error: ", response.message);
+                        }
+                    } else {
+                        console.error("Error: ", xhr.status);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            }
+            function ver_detalles(id){
+                window.location.href = "shop-detail.php?id="+id;
+            }
+            /*
+            esto no funciona bien
+            function aniadirCarrito(id_comida) {
+                fetch('add_to_cart.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_comida: id_comida })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Producto añadido al carrito');
+                            // Actualiza el número de artículos en el carrito
+                            document.getElementById('cart-count').innerText = data.total_items;
+                        } else {
+                            alert('Error al añadir el producto al carrito: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }*/
+        </script>
     </body>
 
 </html>

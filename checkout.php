@@ -108,18 +108,22 @@ require 'nav_bar.php'
                             <div class="form-item">
                                 <label class="form-label my-3">Nombre:</label>
                                 <p id="nombre">' . $cliente['nombre'] . '</p>
+                                <input type="hidden" name="nombre" value="' . $cliente['nombre'] . '">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Domicilio:</label>
                                 <p id="domicilio">' . $cliente['Domicilio'] . '</p>
+                                <input type="hidden" name="domicilio" value="' . $cliente['Domicilio'] . '">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Número de Tarjeta:</label>
                                 <p id="numero_tarjeta">' . $cliente['Número_tarjeta'] . '</p>
+                                <input type="hidden" name="numero_tarjeta" value="' . $cliente['Número_tarjeta'] . '">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Teléfono:</label>
                                 <p id="telefono">' . $cliente['Teléfono'] . '</p>
+                                <input type="hidden" name="telefono" value="' . $cliente['Teléfono'] . '">
                             </div>
                         </div>
                     </div>';
@@ -190,6 +194,7 @@ require 'nav_bar.php'
                                     <tr>
                                         <td colspan="4" class="text-end">Total:</td>
                                         <td><?php echo number_format($total, 2); ?> $</td>
+                                        <input type="hidden" name="precio_total" value="<?=$total?>">
                                     </tr>
                                     </tfoot>
                                 </table>

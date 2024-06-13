@@ -1,19 +1,16 @@
 <?php
-global $conexion;
 require 'conexion.php';
 session_start();
 
-echo "<script>console.log('Pedido realizado con éxito')</script>";
-// Obtener los datos del cuerpo de la solicitud
-$input = json_decode(file_get_contents('php://input'), true);
+// Obtener los datos del formulario
 $id_usuario = $_SESSION['id'];
-$domicilio_entrega = $input['domicilio_entrega'];
-$precio_total = $input['precio_total'];
+$domicilio_entrega = $_POST['domicilio'];
+$precio_total = $_POST['precio_total'];
 $estado = "En preparación";
 $fecha_pedido = date("Y-m-d H:i:s");
-$fecha_entrega = date("Y-m-d H:i:s", strtotime("+1 day"));
+$fecha_entrega = date("Y-m-d H:i:s", strtotime("+14 days"));
 
-// Preparar la consulta SQL
+// Preparar la consulta SQL para insertar en la tabla pedidos
 $sql = "INSERT INTO pedidos (ID_Cliente, Fecha_pedido, Fecha_entrega, Domicilio_entrega, Precio_total, Estado) VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conexion->prepare($sql);
 
@@ -44,11 +41,12 @@ if ($stmt) {
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
-        echo "<script>alert('Pedido realizado con éxito')</script>";
+
         echo json_encode(["status" => "success", "message" => "Order placed successfully"]);
     } else {
-        echo json_encode(["status" => " error", "message" => "Error: " . $stmt->error]);
+        echo json_encode(["status" => "error", "message" => "Error al procesar el pedido"]);
     }
 } else {
     echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
 }
+?>

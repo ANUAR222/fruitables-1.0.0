@@ -81,7 +81,6 @@ require 'nav_bar.php'
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
                             <?php
-                            session_start(); // Asegúrate de que la sesión esté iniciada
 
                             $host = "complist.mysql.database.azure.com";
                             $user = "complist";

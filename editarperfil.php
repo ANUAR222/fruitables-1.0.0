@@ -2,18 +2,19 @@
 require 'conexion.php';
 session_start();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <style>
-#imagen {
-width: 100%;
+        #imagen {
+            width: 100%;
             height: 100%;
         }
     </style>
     <meta charset="utf-8">
-    <title>Perfil de Usuario</title>
+    <title>Editar Perfil</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Google Web Fonts -->
@@ -37,71 +38,78 @@ width: 100%;
 </head>
 
 <body>
-<!-- Modal Search Start -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content rounded-0">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex align-items-center">
-                <div class="input-group w-75 mx-auto d-flex">
-                    <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                    <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal Search End -->
-
-
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">Adminsitracion de perfil</h1>
+    <h1 class="text-center text-white display-6">Administración de perfil</h1>
     <ol class="breadcrumb justify-content-center mb-0">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active text-white">Shop</li>
+        <li class="breadcrumb-item active text-white">Editar Perfil</li>
     </ol>
 </div>
 <!-- Single Page Header end -->
 
-<form id="editar" action="gestionEditarPerfi.php" method="post" enctype="multipart/form-data">
+<form id="editarPerfilForm" action="gestionEditarPerfil.php" method="post">
     <div class="container-fluid py-5 mt-5">
         <div class="container py-5">
             <div class="row g-4 mb-5">
                 <div class="col-lg-8 col-xl-9">
                     <div id="prod_edit" class="row g-4">
                         <?php
+                        // Fetch user details from 'usuario', 'cliente', and 'datospago' tables
                         $id = $_SESSION['id'];
-                        $sql = "SELECT usuario.email as correo, cliente.nombre as Nombre FROM usuario INNER JOIN cliente ON usuario.id=cliente.id_usuario WHERE usuario.id = '$id'";
-                        $result = $conexion->query($sql);
+                        $sql = "SELECT u.email as correo, c.nombre as Nombre, d.Domicilio, d.Número_tarjeta, d.Teléfono
+                                    FROM usuario u
+                                    INNER JOIN cliente c ON u.id = c.id_usuario
+                                    INNER JOIN datospago d ON c.id_datosPago = d.id
+                                    WHERE u.id = ?";
+                        $stmt = $conexion->prepare($sql);
+                        $stmt->bind_param("i", $id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                         $row = $result->fetch_assoc();
+
                         $nombre = $row['Nombre'];
                         $correo = $row['correo'];
-                        echo '<div class="col-lg-6">
-                        <div class="border rounded p-4">
-                            <h2>Nombre</h2>
-                            <input type="text" class="form-control" name="nombre" value="'.$nombre.'">
-                        </div>
-                        <div class="border rounded p-4 mt-4">
-                            <h2>Correo</h2>
-                            <input type="text" class="form-control" name="correo" value="'.$correo.'">
-                        </div>';
+                        $domicilio = $row['Domicilio'];
+                        $num_tarjeta = $row['Número_tarjeta'];
+                        $telefono = $row['Teléfono'];
+
+                        // Display inputs for editing
+                        echo '
+                            <div class="col-lg-6">
+                                <div class="border rounded p-4">
+                                    <h2>Nombre</h2>
+                                    <input type="text" class="form-control" name="nombre" value="'.$nombre.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>Correo</h2>
+                                    <input type="email" class="form-control" name="correo" value="'.$correo.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>Domicilio</h2>
+                                    <input type="text" class="form-control" name="domicilio" value="'.$domicilio.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>Número de Tarjeta</h2>
+                                    <input type="text" class="form-control" name="num_tarjeta" value="'.$num_tarjeta.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>Teléfono</h2>
+                                    <input type="text" class="form-control" name="telefono" value="'.$telefono.'" required>
+                                </div>
+                            </div>';
+
                         $conexion->close();
                         ?>
-                        <!-- Botones de edición y eliminación -->
-                        <button type="submit" id="editar" class="btn btn-warning rounded-pill px-4 py-2 mb-4"><i class="fa fa-edit me-2"></i> Editar</button>
+                        <!-- Submit Button -->
+                        <button type="submit" id="editar" class="btn btn-warning rounded-pill px-4 py-2 mt-4"><i class="fa fa-edit me-2"></i> Guardar Cambios</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-
 
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -111,3 +119,6 @@ width: 100%;
 <script src="lib/lightbox/js/lightbox.min.js"></script>
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
+</body>
+
+</html>

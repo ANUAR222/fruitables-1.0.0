@@ -1,5 +1,10 @@
 <?php
-require 'nav_bar.php'
+require 'nav_bar.php';
+
+// Evitar iniciar sesión si ya está iniciada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <!DOCTYPE html>
@@ -31,74 +36,99 @@ require 'nav_bar.php'
 </head>
 
 <body>
-    <!-- Aquí va el código HTML para la estructura de la página de perfil de usuario -->
-    <div class="container-fluid py-5 mb-5 hero-header">
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <h1 class="text-primary display-6">Perfil de Usuario</h1>
-                <div class="profile-info">
-                    <?php
-                    require 'conexion.php';
-                    $correo = $_SESSION['correo'];
-                    $sql = "SELECT * FROM usuario WHERE email=?";
-                    $stmt = $conexion->prepare($sql);
-                    $stmt->bind_param("s", $correo);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $user = $result->fetch_assoc();
-                    $alta = $user['fecha_alta'];
-                    $sql = "SELECT * FROM cliente WHERE id_usuario=?";
-                    $stmt = $conexion->prepare($sql);
-                    $stmt->bind_param("i", $user['id']);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $cliente = $result->fetch_assoc();
-                    $nombre = $cliente['nombre'];
-                    echo '<h2 id="Nombre">'.$nombre.'</h2>
-                    <p id="Correo">'.$_SESSION['correo'].'</p> 
-                    <p id="Alta">Fecha de alta:</p>'.$alta.'</p> </form>';
-                    ?>
-                </div>
+<!-- Aquí va el código HTML para la estructura de la página de perfil de usuario -->
+<div class="container-fluid py-5 mb-5 hero-header">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <h1 class="text-primary display-6">Perfil de Usuario</h1>
+            <div class="profile-info">
+                <?php
+                require 'conexion.php';
+
+                // Verificar si el usuario está autenticado
+                if (!isset($_SESSION['correo'])) {
+                    header("Location: login.php");
+                    exit;
+                }
+
+                $correo = $_SESSION['correo'];
+                $sql = "SELECT usuario.*, cliente.*, datospago.Número_tarjeta, datospago.CVV, datospago.Fecha_caducidad, datospago.Domicilio 
+                            FROM usuario 
+                            INNER JOIN cliente ON usuario.id = cliente.id_usuario 
+                            LEFT JOIN datospago ON cliente.id_datosPago = datospago.id 
+                            WHERE usuario.email = ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("s", $correo);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
+
+                if (!$user) {
+                    echo "No se encontraron datos para este usuario.";
+                    exit;
+                }
+
+                $alta = $user['fecha_alta'];
+                $nombre = $user['nombre'];
+                $correo = $user['email'];
+                $domicilio = isset($user['Domicilio']) ? $user['Domicilio'] : ''; // Verificar si Domicilio está definido
+                $num_tarjeta = $user['Número_tarjeta'];
+                $cvv = $user['CVV'];
+                $fecha_caducidad = $user['Fecha_caducidad'];
+
+                echo '<h2 id="Nombre">'.$nombre.'</h2>
+                          <p id="Correo">'.$correo.'</p>
+                          <p id="Alta">Fecha de alta: '.$alta.'</p>';
+
+                // Verificar si el campo Domicilio está presente y no vacío
+                if (!empty($domicilio)) {
+                    echo '<p id="Domicilio">Domicilio: '.$domicilio.'</p>';
+                } else {
+                    echo '<p id="Domicilio">Domicilio: No disponible</p>';
+                }
+
+                echo '<p id="NumTarjeta">Número de Tarjeta: '.$num_tarjeta.'</p>
+                          <p id="CVV">CVV: '.$cvv.'</p>
+                          <p id="FechaCaducidad">Fecha de Caducidad: '.$fecha_caducidad.'</p>';
+                ?>
             </div>
         </div>
-        <!-- Aquí va el código HTML para con botones de edición y eliminación -->
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <a href="adminstracion_platos.php" class="btn btn-primary">Adminsitrar comida</a>
-                <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>
-                <a onclick="cerrar_sesiso()"  class="btn btn-danger">Cerrar Sesion</a>
-            </div>
     </div>
+    <!-- Aquí va el código HTML para con botones de edición y eliminación -->
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <a href="adminstracion_platos.php" class="btn btn-primary">Administrar comida</a>
+            <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>
+            <a onclick="cerrar_sesion()" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+</div>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<!-- JavaScript Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/lightbox/js/lightbox.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-        <script>//cambia los datos por inputs
-            function replaceWithInput(id, value) {
-    document.getElementById(id).innerHTML = `<input type="text" id="${id}" value="${value}">`;
-}
-function cerrar_sesiso() {
-    $.ajax({
-        type: "POST",
-        url: "apis.php?cerrar",
-        data: {
-            cerrar_sesion: true
-        },
-        success: function(data) {
-            console.log(data);
-            window.location.href = "login.php";
-        }
-    });
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+<script>
+    function cerrar_sesion() {
+        $.ajax({
+            type: "POST",
+            url: "apis.php?cerrar",
+            data: {
+                cerrar_sesion: true
+            },
+            success: function(data) {
+                console.log(data);
+                window.location.href = "login.php";
             }
-
-        </script>
+        });
+    }
+</script>
 
 </body>
 

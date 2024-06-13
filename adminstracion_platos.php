@@ -129,6 +129,7 @@ require 'conexion.php';
                                                 <p class="text-dark fs-5 fw-bold mb-0">$'.$precio.'</p>
                                                 <a onclick="editar('.$id.')" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Editar Producto</a>
                                                 <a onclick="eliminar('.$id.')" class="btn btn-danger rounded-pill px-4 py-2 mb-4"><i class="fa fa-trash me-2"></i> Eliminar</a>
+                                                <a onclick="pedStock('.$id.')" class="btn btn-primary rounded-pill px-4 py-2 mb-4"><i class="fa fa-shopping-bag me-2"></i> Pedir Stock</a>
                                             </div>
                                         </div>
                                     </div>
@@ -172,6 +173,9 @@ require 'conexion.php';
 //pon el id del producto a editar en la url de editar_plato.php
 function editar(id) {
     window.location.href = "editarplato.php?id="+id;
+}
+function pedStock(id) {
+    window.location.href = "pedirstock.php?id="+id;
 }
 function eliminar(id) {
     $.ajax({

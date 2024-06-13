@@ -38,11 +38,25 @@ require 'nav_bar.php'
                 <h1 class="text-primary display-6">Perfil de Usuario</h1>
                 <div class="profile-info">
                     <?php
-                    echo '<h2 id="Nombre">Nombre de Usuario</h2> 
-                    <p id="Correo">Correo</p>'.$_SESSION['correo'].' 
-                    <p id="nacimiento">Fecha de Nacimiento</p>
-                    <p id="Dirección">Dirección</p>
-                    <p id="Teléfono">Teléfono</p>'
+                    require 'conexion.php';
+                    $correo = $_SESSION['correo'];
+                    $sql = "SELECT * FROM usuario WHERE email=?";
+                    $stmt = $conexion->prepare($sql);
+                    $stmt->bind_param("s", $correo);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $user = $result->fetch_assoc();
+                    $alta = $user['fecha_alta'];
+                    $sql = "SELECT * FROM cliente WHERE id_usuario=?";
+                    $stmt = $conexion->prepare($sql);
+                    $stmt->bind_param("i", $user['id']);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $cliente = $result->fetch_assoc();
+                    $nombre = $cliente['nombre'];
+                    echo '<h2 id="Nombre">'.$nombre.'</h2>
+                    <p id="Correo">'.$_SESSION['correo'].'</p> 
+                    <p id="Alta">Fecha de alta:</p>'.$alta.'</p> </form>';
                     ?>
                 </div>
             </div>
@@ -51,7 +65,7 @@ require 'nav_bar.php'
         <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <a href="adminstracion_platos.php" class="btn btn-primary">Adminsitrar comida</a>
-                <a id="editar" onclick="editarperfil()" class="btn btn-primary">Editar Perfil</a>
+                <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>
                 <a onclick="cerrar_sesiso()"  class="btn btn-danger">Cerrar Sesion</a>
             </div>
     </div>
@@ -70,7 +84,6 @@ require 'nav_bar.php'
             function replaceWithInput(id, value) {
     document.getElementById(id).innerHTML = `<input type="text" id="${id}" value="${value}">`;
 }
-
 function cerrar_sesiso() {
     $.ajax({
         type: "POST",
@@ -84,36 +97,9 @@ function cerrar_sesiso() {
         }
     });
             }
-function editarperfil() {
-    ['Nombre', 'Correo', 'nacimiento', 'Dirección', 'Teléfono'].forEach(id => {
-        replaceWithInput(id, document.getElementById(id).innerHTML);
-    });
 
-    document.getElementById("editar").innerHTML = '<button onclick="editar_perfil2()" class="btn btn-primary">Guardar</button>';
-}
-            function editar_perfil2() {
-                var nombre = document.getElementById("Nombre").value;
-                var correo = document.getElementById("Correo").value;
-                var nacimiento = document.getElementById("nacimiento").value;
-                var direccion = document.getElementById("Dirección").value;
-                var telefono = document.getElementById("Teléfono").value;
-                $.ajax({
-                    type: "POST",
-                    url: "apis.php",
-                    data: {
-                        nombre: nombre,
-                        correo: correo,
-                        nacimiento: nacimiento,
-                        direccion: direccion,
-                        telefono: telefono
-                    },
-                    success: function(data) {
-                        alert(data);
-                    }
-                });
-
-            }
         </script>
+
 </body>
 
 </html>

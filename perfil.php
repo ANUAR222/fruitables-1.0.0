@@ -1,4 +1,5 @@
 <?php
+global $conexion;
 require 'nav_bar.php';
 
 // Evitar iniciar sesión si ya está iniciada
@@ -98,6 +99,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <div class="container py-5">
         <div class="row g-5 align-items-center">
             <a href="adminstracion_platos.php" class="btn btn-primary">Administrar comida</a>
+            <a href="pedidos.php" class="btn btn-primary">Historial de Pedidos</a>
             <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>
             <a onclick="cerrar_sesion()" class="btn btn-danger">Cerrar Sesión</a>
         </div>

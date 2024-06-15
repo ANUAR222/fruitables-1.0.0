@@ -49,16 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['editarperfil'])) {
     $input = json_decode(file_get_contents('php://input'), true);
     $nombre = $input['nombre'];
     $correo = $input['correo'];
-    $nacimiento = $input['nacimiento'];
-    $direccion = $input['direccion'];
-    $telefono = $input['telefono'];
-
     // Preparar la consulta SQL
-    $sql = "UPDATE usuarios SET Nombre=?, Correo=?, Nacimiento=?, Direccion=?, Telefono=? WHERE id=?";
+    $sql = "UPDATE usuarios SET Nombre=?, Correo=? WHERE id=?";
     $stmt = $conexion->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("ssssi", $nombre, $correo, $nacimiento, $direccion, $telefono);
+        $stmt->bind_param("ssi", $nombre, $correo, $_SESSION['id']);
 
         if ($stmt->execute()) {
             echo json_encode(["status" => "success", "message" => "Update successful"]);
@@ -143,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['editarplatos'])) {
     $precio = $input['precio'];
     $descripcion = $input['descripcion'];
     $id = $input['id'];
-
+    $imagen = $input['imagen'];
     // Preparar la consulta SQL
     $sql = "UPDATE comidas SET Nombre=?, Precio=?, Ingredientes=? WHERE id=?";
     $stmt = $conexion->prepare($sql);
@@ -161,6 +157,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['editarplatos'])) {
     } else {
         echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
     }
+    $sql2 = "DELETE FROM imagenes WHERE IDComida=?";
+    $stmt2 = $conexion->prepare($sql2);
+    if ($stmt2) {
+        $stmt2->bind_param("si", $imagen, $id);
+    }
+    $sql3 = "INSERT INTO imagenes (IDComida, imagen) VALUES (?, ?)";
+    $stmt3 = $conexion->prepare($sql3);
+    if ($stmt3) {
+        $stmt3->bind_param("is", $id, $imagen);
+    }
+
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['añadirplatos'])) {
@@ -195,8 +202,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['eliminarplatos'])) {
     // Obtener los datos del cuerpo de la solicitud
     $input = json_decode(file_get_contents('php://input'), true);
     $id = $input['id'];
-
-    // Preparar la consulta SQL
     $sql = "DELETE FROM comidas WHERE id=?";
     $stmt = $conexion->prepare($sql);
 
@@ -332,7 +337,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['eliminarCarrito'])) {
         echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
     }
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_GET['eliminarPedido'])) {
+    // Obtener los datos del cuerpo de la solicitud
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id = $input['id'];
+    $id_usuario = $_SESSION['id'];
 
+    // Preparar la consulta SQL
+    $sql = "DELETE FROM comidas_de_pedidos WHERE id_pedido=?";
+    $stmt = $conexion->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+    }
+    $sql = "DELETE FROM pedidos WHERE id=?";
+    $stmt = $conexion->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Delete successful"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+        }
+
+        $stmt->close();
+    } else {
+        echo json_encode(["status" => "error", "message" => "Error: " . $conexion->error]);
+    }
+}
 
 $conexion->close();
 ?>

@@ -335,6 +335,11 @@ require 'conexion.php';
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        function ver_detalles(id){
+            window.location.href = "shop-detail.php?id="+id;
+        }
+    </script>
     </body>
 
 </html>

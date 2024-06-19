@@ -1,3 +1,6 @@
+
+
+
 <!doctype html>
 <html lang="en">
 
@@ -41,7 +44,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="sample-page.html" aria-expanded="false">
+                        <a class="sidebar-link" href="sample-page.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>

@@ -100,9 +100,10 @@ adiministrador.id_usuario=mensajes.id_remitente LEFT JOIN duenio ON duenio.id_us
                                     <h2>Usuario</h2>
                                     <p>' . $row['admin'] . '</p>
                                 </div>
-                                <div class="border rounded p-4 mt-4">
+                                <div class="border rounded p-4 mt-4" style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; margin-top: 20px; max-width: 100%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
                                     <h2>Mensaje</h2>
-                                    <textarea class="form-control" name="mensaje" id="mensaje" rows="5" required>' . $row['mensaje'] . '</textarea>
+                                        <p style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; white-space: normal; max-height: 150px; overflow: hidden; text-overflow: ellipsis;">
+                                        ' . $row['mensaje'] . '</p>
                                 </div>';
                         }
                     }

@@ -30,7 +30,7 @@ if ($stmt) {
                     $result = $stmt->get_result();
                     $jefe = $result->fetch_assoc();
                     if($jefe){
-                        header('Location: /fruitables-1.0.2/Modernize-1.0.0/src/html/index.php');
+                        header('Location: Modernize-1.0.0/src/html/index.php');
                     }else{
                         header('Location: index.php');
                     }

@@ -132,7 +132,6 @@ require 'nav_bar.php'
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Imagen</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Precio</th>
                                         <th scope="col">Cantidad</th>
@@ -159,7 +158,6 @@ require 'nav_bar.php'
                                         $subtotal += $total_item;
                                         echo '
                                     <tr>
-                                        <td><img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt=""></td>
                                         <td>' . $comida['Nombre'] . '</td>
                                         <td>' . $comida['Precio'] . ' $</td>
                                         <td>' . $comida['cantidad'] . '</td>
@@ -180,15 +178,15 @@ require 'nav_bar.php'
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="4" class="text-end">Subtotal:</td>
+                                        <td colspan="3" class="text-end">Subtotal:</td>
                                         <td><?php echo number_format($subtotal, 2); ?> $</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end">Envío:</td>
+                                        <td colspan="3" class="text-end">Envío:</td>
                                         <td><?php echo number_format($shipping_cost, 2); ?> $</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end">Total:</td>
+                                        <td colspan="3" class="text-end">Total:</td>
                                         <td><?php echo number_format($total, 2); ?> $</td>
                                         <input type="hidden" name="precio_total" value="<?=$total?>">
                                     </tr>

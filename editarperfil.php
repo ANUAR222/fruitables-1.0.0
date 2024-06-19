@@ -1,5 +1,6 @@
 <?php
 require 'conexion.php';
+require 'nav_bar.php';
 session_start();
 ?>
 
@@ -58,7 +59,7 @@ session_start();
                         <?php
                         // Fetch user details from 'usuario', 'cliente', and 'datospago' tables
                         $id = $_SESSION['id'];
-                        $sql = "SELECT u.email as correo, c.nombre as Nombre, d.Domicilio, d.Número_tarjeta, d.Teléfono
+                        $sql = "SELECT u.email as correo, c.nombre as Nombre, d.Domicilio, d.Número_tarjeta, d.Teléfono, d.CVV, d.Fecha_caducidad
                                     FROM usuario u
                                     INNER JOIN cliente c ON u.id = c.id_usuario
                                     INNER JOIN datospago d ON c.id_datosPago = d.id
@@ -74,6 +75,8 @@ session_start();
                         $domicilio = $row['Domicilio'];
                         $num_tarjeta = $row['Número_tarjeta'];
                         $telefono = $row['Teléfono'];
+                        $cvv = $row['CVV'];
+                        $fecha_caducidad = $row['Fecha_caducidad'];
 
                         // Display inputs for editing
                         echo '
@@ -97,6 +100,14 @@ session_start();
                                 <div class="border rounded p-4 mt-4">
                                     <h2>Teléfono</h2>
                                     <input type="text" class="form-control" name="telefono" value="'.$telefono.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>CVV</h2>
+                                    <input type="text" class="form-control" name="cvv" value="'.$cvv.'" required>
+                                </div>
+                                <div class="border rounded p-4 mt-4">
+                                    <h2>Fecha de Caducidad</h2>
+                                    <input type="date" class="form-control" name="fecha_caducidad" value="'.$fecha_caducidad.'" required>
                                 </div>
                             </div>';
 

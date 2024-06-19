@@ -5,7 +5,7 @@ $(async function () {
   function getSales() {
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "Modernize-1.0.0/src/assets/js/apis.php?ventas_por_mes", true);
+      xhr.open("POST", "/apis.php?ventas_por_mes", true);
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           console.log('Success:', xhr.response);
@@ -135,7 +135,7 @@ $(async function () {
 function obtener_ventas_de_los_ultimos_3_anos(){
     return promise = new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/fruitables-1.0.0/Modernize-1.0.0/src/assets/js/apis.php?ventas_por_anio", true);
+        xhr.open("POST", "/apis.php?ventas_por_anio", true);
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
                 console.log('Success:', xhr.response);
@@ -216,7 +216,7 @@ function obtener_ventas_de_los_ultimos_3_anos(){
   function obtener_usuraios_por_mes(){
     return promise = new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/fruitables-1.0.0/Modernize-1.0.0/src/assets/js/apis.php?usuarios_por_mes", true);
+        xhr.open("POST", "/apis.php?usuarios_por_mes", true);
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
                 console.log('Success:', xhr.response);

@@ -105,20 +105,20 @@
                                     <a onclick="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">
                                         Logout</a>
                                     <script>
-window.onload = function() {
-    window.logout = function() {
-        fetch('/fruitables-1.0.0/Modernize-1.0.0/src/html/logout.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(response => {
-            if (response.status) {
-                window.location.href = 'https://localhost/fruitables-1.0.2/index.php';
-            }
-        });
-    }
-}
+                                        window.onload = function() {
+                                            window.logout = function() {
+                                                fetch('logout.php', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                    },
+                                                }).then(response => {
+                                                    if (response.status) {
+                                                        window.location.href = '../../../login.php';
+                                                    }
+                                                });
+                                            }
+                                        }
 </script>
                                 </div>
                             </div>
@@ -191,9 +191,6 @@ window.onload = function() {
                           </span>
                                                 <p class="text-dark me-1 fs-3 mb-0">
                                                     <?php
-                                                    //quiro el porcentaje de aumento de ventas con respecto al año pasado
-
-
                                                     if ($lastYearTotal['SUM(Precio_total)'] != 0) {
                                                         $percentage = ($currentYeraTotal['SUM(Precio_total)'] - $lastYearTotal['SUM(Precio_total)']) / $lastYearTotal['SUM(Precio_total)'] * 100;
                                                         echo number_format($percentage, 2) . "%";
@@ -299,201 +296,61 @@ window.onload = function() {
                                             <h6 class="fw-semibold mb-0">Precio</h6>
                                         </th>
                                         <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Cantidad</h6>
+                                            <h6 class="fw-semibold mb-0">Cantidad vendida</h6>
                                         </th>
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Ventas</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Stock Restante</h6>
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    /*create table comidas_de_pedidos
-                (
-                    id_pedido int not null,
-                    id_comida int not null,
-                    cantidad  int null,
-                    primary key (id_pedido, id_comida),
-                    constraint comidas_de_pedidos_ibfk_1
-                        foreign key (id_pedido) references pedidos (id),
-                    constraint comidas_de_pedidos_ibfk_2
-                        foreign key (id_comida) references comidas (id)
-                );create table pedidos
-                (
-                    id                int auto_increment
-                        primary key,
-                    ID_Cliente        int                                                not null,
-                    ID_Comida         int                                                not null,
-                    Fecha_pedido      datetime                                           not null,
-                    Fecha_entrega     datetime                                           not null,
-                    Domicilio_entrega varchar(255)                                       not null,
-                    Precio_total      decimal(10, 2)                                     not null,
-                    Estado            enum ('En preparación', 'En reparto', 'Entregado') not null,
-                    constraint clientpedido
-                        foreign key (ID_Cliente) references cliente (id),
-                    constraint compedio
-                        foreign key (ID_Comida) references comidas (id)
-                )*/
-                                    $sql = "SELECT comidas_de_pedidos.id_comida, comidas.Nombre, comidas.Precio,SUM(comidas_de_pedidos.cantidad) as cant, SUM(comidas_de_pedidos.cantidad)*comidas.Precio as total 
-        FROM comidas_de_pedidos 
-        JOIN comidas ON comidas_de_pedidos.id_comida = comidas.id 
-        GROUP BY comidas_de_pedidos.id_comida 
-        ORDER BY total DESC";
 
-                                    $result = $conexion->query($sql);
 
-                                    if ($result === false) {
-                                        echo json_encode(["status" => "error", "message" => "La consulta SQL falló: " . $conexion->error]);
-                                    } else {
-                                        $i = 1;
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>";
-                                            echo "<td class='border-bottom-0'><h6 class='fw-semibold mb-0'>" . $i . "</h6></td>";
-                                            echo "<td class='border-bottom-0'>";
-                                            echo "<h6 class='fw-semibold mb-1'>" . $row['Nombre'] . "</h6>";
-                                            echo "</td>";
-                                            echo "<td class='border-bottom-0'>";
-                                            echo "<p class='mb-0 fw-normal'>" . $row['Precio'] . "</p>";
-                                            echo "</td>";
-                                            echo "<td class='border-bottom-0'>";
-                                            echo "<div class='d-flex align-items-center gap-2'>";
-                                            echo "<span class='badge bg-primary rounded-3 fw-semibold'>" . $row['cant'] . "</span>";
-                                            echo "</div>";
-                                            echo "</td>";
-                                            echo "<td class='border-bottom-0'>";
-                                            echo "<h6 class='fw-semibold mb-0 fs-4'>" . $row['total'] . "</h6>";
-                                            echo "</td>";
-                                            echo "</tr>";
-                                            $i++;
+                                        // Muestra los platos más vendidos y su stock
+                                        $sql = "SELECT comidas_de_pedidos.id_comida, comidas.Nombre, comidas.Precio, SUM(comidas_de_pedidos.cantidad) as cant, SUM(comidas_de_pedidos.cantidad)*comidas.Precio as total, COALESCE(SUM(pedido_stock.cantidad), comidas.stock) as stock
+FROM comidas_de_pedidos 
+JOIN comidas ON comidas_de_pedidos.id_comida = comidas.id 
+LEFT JOIN pedido_stock ON comidas.id = pedido_stock.id_comida
+GROUP BY comidas_de_pedidos.id_comida 
+ORDER BY total DESC";
+
+                                        $result = $conexion->query($sql);
+
+                                        if ($result === false) {
+                                            echo json_encode(["status" => "error", "message" => "La consulta SQL falló: " . $conexion->error]);
+                                        } else {
+                                            $i = 1;
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td class='border-bottom-0'><h6 class='fw-semibold mb-0'>" . $i . "</h6></td>";
+                                                echo "<td class='border-bottom-0'>";
+                                                echo "<h6 class='fw-semibold mb-1'>" . $row['Nombre'] . "</h6>";
+                                                echo "</td>";
+                                                echo "<td class='border-bottom-0'>";
+                                                echo "<p class='mb-0 fw-normal'>" . $row['Precio'] . "</p>";
+                                                echo "</td>";
+                                                echo "<td class='border-bottom-0'>";
+                                                echo "<div class='d-flex align-items-center gap-2'>";
+                                                echo "<span class='badge bg-primary rounded-3 fw-semibold'>" . $row['cant'] . "</span>";
+                                                echo "</div>";
+                                                echo "</td>";
+                                                echo "<td class='border-bottom-0'>";
+                                                echo "<h6 class='fw-semibold mb-0 fs-4'>" . $row['total'] . "</h6>";
+                                                echo "</td>";
+                                                echo "<td class='border-bottom-0'>";
+                                                echo "<p class='mb-0 fw-normal'>" . $row['stock'] . "</p>";
+                                                echo "</td>";
+                                                echo "</tr>";
+                                                $i++;
+                                            }
                                         }
-                                    }
-
-
-                                    ?>
+                                        ?>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card overflow-hidden rounded-2">
-                        <div class="position-relative">
-                            <a href="javascript:void(0)"><img src="../assets/images/products/s4.jpg"
-                                                              class="card-img-top rounded-0" alt="..."></a>
-                            <a href="javascript:void(0)"
-                               class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
-                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i
-                                        class="ti ti-basket fs-4"></i></a></div>
-                        <div class="card-body pt-3 p-4">
-                            <h6 class="fw-semibold fs-4">Boat Headphone</h6>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold fs-4 mb-0">$50 <span class="ms-2 fw-normal text-muted fs-3"><del>$65</del></span>
-                                </h6>
-                                <ul class="list-unstyled d-flex align-items-center mb-0">
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card overflow-hidden rounded-2">
-                        <div class="position-relative">
-                            <a href="javascript:void(0)"><img src="../assets/images/products/s5.jpg"
-                                                              class="card-img-top rounded-0" alt="..."></a>
-                            <a href="javascript:void(0)"
-                               class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
-                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i
-                                        class="ti ti-basket fs-4"></i></a></div>
-                        <div class="card-body pt-3 p-4">
-                            <h6 class="fw-semibold fs-4">MacBook Air Pro</h6>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold fs-4 mb-0">$650 <span class="ms-2 fw-normal text-muted fs-3"><del>$900</del></span>
-                                </h6>
-                                <ul class="list-unstyled d-flex align-items-center mb-0">
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card overflow-hidden rounded-2">
-                        <div class="position-relative">
-                            <a href="javascript:void(0)"><img src="../assets/images/products/s7.jpg"
-                                                              class="card-img-top rounded-0" alt="..."></a>
-                            <a href="javascript:void(0)"
-                               class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
-                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i
-                                        class="ti ti-basket fs-4"></i></a></div>
-                        <div class="card-body pt-3 p-4">
-                            <h6 class="fw-semibold fs-4">Red Valvet Dress</h6>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold fs-4 mb-0">$150 <span class="ms-2 fw-normal text-muted fs-3"><del>$200</del></span>
-                                </h6>
-                                <ul class="list-unstyled d-flex align-items-center mb-0">
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card overflow-hidden rounded-2">
-                        <div class="position-relative">
-                            <a href="javascript:void(0)"><img src="../assets/images/products/s11.jpg"
-                                                              class="card-img-top rounded-0" alt="..."></a>
-                            <a href="javascript:void(0)"
-                               class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
-                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i
-                                        class="ti ti-basket fs-4"></i></a></div>
-                        <div class="card-body pt-3 p-4">
-                            <h6 class="fw-semibold fs-4">Cute Soft Teddybear</h6>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold fs-4 mb-0">$285 <span class="ms-2 fw-normal text-muted fs-3"><del>$345</del></span>
-                                </h6>
-                                <ul class="list-unstyled d-flex align-items-center mb-0">
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="me-1" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                    <li><a class="" href="javascript:void(0)"><i
-                                                    class="ti ti-star text-warning"></i></a></li>
-                                </ul>
                             </div>
                         </div>
                     </div>

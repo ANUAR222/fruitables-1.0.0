@@ -68,13 +68,12 @@ session_start();
                             <div class="col-lg-6">
                                 <div class="border rounded p-4">
                                     <h2>Usuario</h2>
-                                    <select name="receptor">
-                                        <option value="0">Todos los clientes</option>;
-                                        <option value="Jefe">Jefe</option>';
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['id'] . '">' . $row['cliente'].'#'. $row['id'] . '</option>';
-                                        }
-                                    echo '</select>';
+                                    <input type="text" id="filter" placeholder="Filtrar resultados">
+                                    <select name="receptor" id="receptor">';
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<option value="' . $row['id'] . '">' . $row['cliente'].'#'. $row['id'] . '</option>';
+                        }
+                        echo '</select>';
                                 echo '</div>
                                 <div class="border rounded p-4 mt-4">
                                     <h2>Mensaje</h2>
@@ -100,6 +99,20 @@ session_start();
 <script src="lib/waypoints/waypoints.min.js"></script>
 <script src="lib/lightbox/js/lightbox.min.js"></script>
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script>document.getElementById('filter').addEventListener('input', function(e) {
+        console.log("dadadas");
+        var filter = e.target.value.toUpperCase();
+        var options = document.getElementById('receptor').options;
+
+        for (var i = 0; i < options.length; i++) {
+            var optionText = options[i].text.toUpperCase();
+            if (optionText.indexOf(filter) > -1) {
+                options[i].style.display = "";
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    });</script>
 
 </body>
 

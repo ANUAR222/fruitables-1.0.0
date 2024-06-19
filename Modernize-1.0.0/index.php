@@ -260,7 +260,7 @@
                                 echo "<i class='ti ti-arrow-down-right text-danger'></i>";
                             }
                             ?>
-                          </span>
+                          </p>
                           <p class="text-dark me-1 fs-3 mb-0">
                               <?php
 

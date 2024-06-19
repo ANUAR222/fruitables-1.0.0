@@ -6,19 +6,9 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-$host = "complist.mysql.database.azure.com";
-$user = "complist";
-$db_password = "ISI2023-2024";
-$db = "sabercomer";
-global $conexion;
-$conexion = new mysqli($host, $user, $db_password, $db);
-
-if ($conexion->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conexion->connect_error]));
-}
-
+require 'conexion.php';
 $data = json_decode(file_get_contents('php://input'), true);
-$id_comida = isset($data['id_comida']) ? $data['id_comida'] : null;
+$id_comida = isset($data['id']) ? $data['id'] : null;
 $id_usuario = $_SESSION['id']; // Asegúrate de tener la sesión iniciada y el ID del usuario disponible
 
 error_log("id_comida: " . $id_comida); // Registro de depuración

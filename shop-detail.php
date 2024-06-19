@@ -13,6 +13,15 @@ if ($id) {
         $stmt->execute();
         $result = $stmt->get_result();
         $product = $result->fetch_assoc();
+        $sql = "SELECT * FROM imagenes WHERE IDComida = ".$product['id'];
+        $result_img = $conexion->query($sql);
+        if($result_img->num_rows > 0) {
+            $row2 = $result_img->fetch_assoc();
+            $imagen = base64_encode($row2['imagen']);
+            $img_src = "data:image/jpg;base64,$imagen";
+        } else {
+            $img_src = "img/single-item.jpg";
+        }
         $stmt->close();
     } else {
         echo "Error en la preparación de la consulta de productos: " . $conexion->error;
@@ -103,14 +112,17 @@ if ($id) {
                         <div class="col-lg-6">
                             <div class="border rounded">
                                 <a href="#">
-                                    <img src="img/single-item.jpg" class="img-fluid rounded" alt="Image">
+                                    <?php
+
+
+                                    echo '<img src='.$img_src.' class="img-fluid rounded" alt="Image" style="object-fit: cover;">'
+                                    ?>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <?php if ($product): ?>
                                 <h4 class="fw-bold mb-3"><?php echo htmlspecialchars($product['Nombre']); ?></h4>
-                                <p class="mb-3">Category: <?php echo htmlspecialchars($product['Tipo']); ?></p>
                                 <h5 class="fw-bold mb-3">$<?php echo htmlspecialchars($product['Precio']); ?></h5>
                                 <div class="d-flex mb-4">
                                     <i class="fa fa-star text-secondary"></i>

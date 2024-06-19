@@ -1,5 +1,5 @@
 <?php
-require 'nav_bar.php';
+require 'nav_bar_admin.php';
 session_start();
 
 $host = "complist.mysql.database.azure.com";

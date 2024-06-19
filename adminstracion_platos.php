@@ -40,15 +40,20 @@ require 'conexion.php';
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content rounded-0">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Búsqueda</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex align-items-center">
                 <div class="input-group w-75 mx-auto d-flex">
-                    <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                    <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                    <form action="adminstracion_platos.php" method="GET" class="d-flex w-100">
+                        <input type="search" name="query" class="form-control p-3" placeholder="Palabras clave" aria-describedby="search-icon-1">
+                        <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -57,40 +62,29 @@ require 'conexion.php';
 
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">Adminsitracion de platos</h1>
+    <h1 class="text-center text-white display-6">Administrar platos</h1>
     <ol class="breadcrumb justify-content-center mb-0">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active text-white">Shop</li>
+        <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+        <li class="breadcrumb-item active text-white">Administrar platos</li>
     </ol>
 </div>
 
 <div class="container-fluid fruite py-5">
     <div class="container py-5">
-        <h1 class="mb-4">Fresh fruits shop</h1>
+        <h1 class="mb-4">Catálogo</h1>
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
                     <div class="col-xl-3">
-                        <div class="input-group w-100 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                        </div>
+                        <form id="search-form" class="input-group w-100 mx-auto d-flex" method="GET">
+                            <input type="search" id="search-input" name="query" class="form-control p-3" placeholder="Palabras clave" aria-describedby="search-icon-1">
+                            <span onclick="document.getElementById('search-form').submit();" id="search-icon-1" class="input-group-text p-3" style="cursor:pointer;">
+                                    <i class="fa fa-search"></i>
+                            </span>
+                        </form>
                         <!--añade un boton para añadir un plato-->
                         <div class="d-flex justify-content-center mt-4">
                             <a onclick="window.location.href = 'aniadirplato.php'" class="btn btn-primary">Añadir Plato</a>
-                        </div>
-                    </div>
-                    <div class="col-6"></div>
-                    <div class="col-xl-3">
-                        <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
-                            <label for="fruits">Default Sorting:</label>
-                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                <option value="volvo">Nothing</option>
-                                <option value="saab">Popularity</option>
-                                <option value="opel">Organic</option>
-                                <option value="audi">Fantastic</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -98,8 +92,22 @@ require 'conexion.php';
                     <div class="col-lg-9">
                         <div class="row g-4 justify-content-center">
                             <?php
+
+                            $query = isset($_GET['query']) ? $_GET['query'] : null;
+
                             $sql = "SELECT * FROM comidas";
                             $result = $conexion->query($sql);
+
+                            if ($query) {
+                                $stmt = $conexion->prepare("SELECT * FROM comidas WHERE Nombre LIKE ?");
+                                $search = "%{$query}%";
+                                $stmt->bind_param("s", $search);
+                            } else {
+                                $stmt = $conexion->prepare("SELECT * FROM comidas");
+                            }
+
+                            $stmt->execute();
+                            $result = $stmt->get_result();
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     $nombre = $row['Nombre'];
@@ -120,7 +128,6 @@ require 'conexion.php';
                                                 echo "<img src='img/single-item.jpg' class='img-fluid w-100 rounded-top' alt=''>";
                                             }
                                             echo '</div>
-                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                                         <div class="p-4 border
                                         border-secondary border-top-0 rounded-bottom">
                                             <h4>'.$nombre.'</h4>
@@ -136,18 +143,6 @@ require 'conexion.php';
                                 }
                             }
                             ?>
-                            <div class="col-12">
-                                <div class="pagination d-flex justify-content-center mt-5">
-                                    <a href="#" class="rounded">&laquo;</a>
-                                    <a href="#" class="active rounded">1</a>
-                                    <a href="#" class="rounded">2</a>
-                                    <a href="#" class="rounded">3</a>
-                                    <a href="#" class="rounded">4</a>
-                                    <a href="#" class="rounded">5</a>
-                                    <a href="#" class="rounded">6</a>
-                                    <a href="#" class="rounded">&raquo;</a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

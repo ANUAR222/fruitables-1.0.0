@@ -5,7 +5,7 @@ $(async function () {
   function getSales() {
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/fruitables-1.0.0/Modernize-1.0.0/src/assets/js/apis.php?ventas_por_mes", true);
+      xhr.open("POST", "Modernize-1.0.0/src/assets/js/apis.php?ventas_por_mes", true);
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           console.log('Success:', xhr.response);

@@ -1,5 +1,5 @@
 <?php
-require 'nav_bar.php'
+require 'nav_bar_admin.php'
 ?>
 
 <!DOCTYPE html>
@@ -59,11 +59,11 @@ require 'nav_bar.php'
 
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">Adminsitracion de platos</h1>
+    <h1 class="text-center text-white display-6">Editar platos</h1>
     <ol class="breadcrumb justify-content-center mb-0">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active text-white">Shop</li>
+        <li class="breadcrumb-item"><a href="indexAdmin.php">Inico</a></li>
+        <li class="breadcrumb-item"><a href="adminstracion_platos.php">Administracion de platos</a></li>
+        <li class="breadcrumb-item active text-white">Editar platos</li>
     </ol>
 </div>
 <form id="editar" action="gestionEditarPlato.php" method="post" enctype="multipart/form-data">
@@ -114,19 +114,13 @@ require 'nav_bar.php'
                     $result = $conexion->query($sql);
                     $row = $result->fetch_assoc();
                     $nombre = $row['Nombre'];
-                    $category = $row['Tipo'];
                     $precio = $row['Precio'];
                     $descripcion = $row['Ingredientes'];
                     $stock = $row['Stock'];
                     $peso = $row['Peso'];
                     $calorias = $row['Calorías'];
                     $tipoenum = ['Entrante', 'Principal', 'Postre'];
-                    forEach($tipoenum as $tipo) {
-                        if ($tipo == $category) {
-                            //delete
-                            unset($tipoenum[array_search($tipo, $tipoenum)]);
-                        }
-                    };
+
                     echo "<div class='col-lg-6'>
                                 <div class='border rounded p-4'>
                                     <h2 class='mb-4'>Editar Plato</h2>
@@ -134,15 +128,7 @@ require 'nav_bar.php'
                                         <label for='nombre' class='form-label'>Nombre</label>
                                         <input type='text' class='form-control' name='nombre' placeholder='Nombre' value='$nombre'>
                                     </div>
-                                    <div class='mb-3'>
-                                        <label for='Category' class='form-label'>Category</label>
-                                        <select name='Category'>
-                                            <option value='$category'>Entrante</option>";
-                                            foreach($tipoenum as $tipo) {
-                                                echo "<option value='$tipo'>$tipo</option>";
-                                            }
-                                        echo "</select>
-                                    </div>
+                                 
                                     <div class='mb-3'>
                                         <label for='precio' class='form-label'>Precio</label>
                                         <input type='text' class='form-control' name='precio' placeholder='Precio' value='$precio'>

@@ -11,13 +11,13 @@ require 'conexion.php';
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Búsqueda</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
                             <form action="shop.php" method="GET" class="d-flex w-100">
-                                <input type="search" name="query" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                                <input type="search" name="query" class="form-control p-3" placeholder="Palabras clave" aria-describedby="search-icon-1">
                                 <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -41,8 +41,8 @@ require 'conexion.php';
                         <h1 class="mb-5 display-3 text-primary">Catálogo de platos elaborados</h1>
                         <div class="position-relative mx-auto">
                             <form action="shop.php" method="GET">
-                                <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="text" name="query" placeholder="Search">
-                                <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">Submit Now</button>
+                                <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="text" name="query" placeholder="Búsqueda">
+                                <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">Buscar</button>
                             </form>
                         </div>
 
@@ -199,9 +199,6 @@ require 'conexion.php';
                         <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>SaberComer</a>, All right reserved.</span>
                     </div>
                     <div class="col-md-6 my-auto text-center text-md-end text-white">
-                        <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                        <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                        <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
                         Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
                     </div>
                 </div>
@@ -285,28 +282,7 @@ require 'conexion.php';
             function ver_detalles(id){
                 window.location.href = "shop-detail.php?id="+id;
             }
-            /*
-            esto no funciona bien
-            function aniadirCarrito(id_comida) {
-                fetch('add_to_cart.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id_comida: id_comida })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Producto añadido al carrito');
-                            // Actualiza el número de artículos en el carrito
-                            document.getElementById('cart-count').innerText = data.total_items;
-                        } else {
-                            alert('Error al añadir el producto al carrito: ' + data.message);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            }*/
+
         </script>
     </body>
 

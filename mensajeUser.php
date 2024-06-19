@@ -51,11 +51,11 @@ $result_mensajes = $stmt_mensajes->get_result();
 <body>
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">Historial de Pedidos</h1>
+    <h1 class="text-center text-white display-6">Historial de Mensajes</h1>
     <ol class="breadcrumb justify-content-center mb-0">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active text-white">Historial de Pedidos</li>
+        <li class="breadcrumb-item active text-white">Historial de Mensajes</li>
     </ol>
 </div>
 <!-- Single Page Header End -->
@@ -63,7 +63,7 @@ $result_mensajes = $stmt_mensajes->get_result();
 <!-- Pedidos Page Start -->
 <div class="container-fluid py-5">
     <div class="container py-5">
-        <h1 class="mb-4">Tus Pedidos</h1>
+        <h1 class="mb-4">Tus Mensajes</h1>
         <div class="table-responsive">
             <table class="table">
                 <thead>

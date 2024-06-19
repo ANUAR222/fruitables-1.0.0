@@ -162,7 +162,6 @@ require 'conexion.php';
             <div class="fruite-img">
                 <img src="'.$img_src.'" id="imagen" class="img-fluid w-100 rounded-top"  alt="Image">
             </div>
-            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
             <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                 <h4>'.$row['Nombre'].'</h4>
                 <p>'.$row['Ingredientes'].'</p>

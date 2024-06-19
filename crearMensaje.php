@@ -70,6 +70,8 @@ session_start();
                                     <h2>Usuario</h2>
                                     <input type="text" id="filter" placeholder="Filtrar resultados">
                                     <select name="receptor" id="receptor">';
+                        echo '<option value="0" >Todos los clientes</option>';
+                        echo '<option value="Jefe" >Jefe</option>';
                         while ($row = $result->fetch_assoc()) {
                             echo '<option value="' . $row['id'] . '">' . $row['cliente'].'#'. $row['id'] . '</option>';
                         }

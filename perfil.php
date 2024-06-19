@@ -100,6 +100,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="row g-5 align-items-center">
             <a href="adminstracion_platos.php" class="btn btn-primary">Administrar comida</a>
             <a href="pedidos.php" class="btn btn-primary">Historial de Pedidos</a>
+            <a href="mis_reseñas.php" class="btn btn-primary">Ver mis reseñas</a>
             <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>
             <a onclick="cerrar_sesion()" class="btn btn-danger">Cerrar Sesión</a>
         </div>
@@ -110,6 +111,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="lib/easing/easing.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="lib/waypoints/waypoints.min.js"></script>
 <script src="lib/lightbox/js/lightbox.min.js"></script>
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
@@ -118,19 +120,25 @@ if (session_status() == PHP_SESSION_NONE) {
 <script src="js/main.js"></script>
 <script>
     function cerrar_sesion() {
+        console.log("Cerrando sesión...");
         $.ajax({
             type: "POST",
             url: "apis.php?cerrar",
             data: {
                 cerrar_sesion: true
             },
+            dataType: "text",
             success: function(data) {
-                console.log(data);
-                window.location.href = "login.php";
+                console.log("Respuesta del servidor: ", data);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX: ", error);
             }
         });
     }
 </script>
+
 
 </body>
 

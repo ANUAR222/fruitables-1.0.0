@@ -107,7 +107,6 @@ if (isset($_SESSION['cart'])) {
                         <tbody id="carrito">
 
                         <?php
-                        session_start(); // Asegúrate de que la sesión esté iniciada
 
                         $host = "complist.mysql.database.azure.com";
                         $user = "complist";

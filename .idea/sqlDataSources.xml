@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="643ce79a-127d-44eb-90d2-e6e45c707bf9" name="sabercomer@complist.mysql.database.azure.com (DDL) Mapping">
+      <data-sources ddl="39b3250c-2017-4a45-88d9-b0cf04212b22" />
+    </mapping>
+  </component>
   <component name="SqlDataSourceStorage">
     <option name="dataSources">
       <list>
@@ -7,6 +12,35 @@
           <option name="id" value="db9856cc-4e3f-4b6f-b3f4-b2effff63560" />
           <option name="name" value="Sabercomer@localhost (DDL)" />
           <option name="dbmsName" value="MARIADB" />
+          <option name="urls">
+            <array />
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+        <State>
+          <option name="id" value="0679c93e-a9c4-4f40-872b-f632eeab7661" />
+          <option name="name" value="sabercomer@complist.mysql.database.azure.com (DDL)" />
+          <option name="dbmsName" value="MYSQL" />
+          <option name="urls">
+            <array />
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+        <State>
+          <option name="id" value="39b3250c-2017-4a45-88d9-b0cf04212b22" />
+          <option name="name" value="sabercomer@complist.mysql.database.azure.com (DDL) Mapping (DDL)" />
+          <option name="dbmsName" value="MYSQL" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$" />
+            </array>
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+        <State>
+          <option name="id" value="adf59e03-d1f9-473f-ba84-2c56366e804f" />
+          <option name="name" value="sabercomer@complist.mysql.database.azure.com (DDL)" />
+          <option name="dbmsName" value="MYSQL" />
           <option name="urls">
             <array />
           </option>

@@ -60,7 +60,7 @@ echo '
                             <a href="indexAdmin.php" class="nav-item nav-link">Inicio</a>
                             <a href="adminstracion_platos.php" class="nav-item nav-link">Comidas</a>
                             <!--<a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>-->
-                            <a href="contact.php" class="nav-item nav-link">Mensajes</a>
+                            <a href="mensajesAdmin.php" class="nav-item nav-link">Mensajes</a>
                             <a href="pedidosAdmin.php" class="nav-item nav-link">Pedidos</a>
                         </div>
                         <div class="d-flex m-3 me-0">

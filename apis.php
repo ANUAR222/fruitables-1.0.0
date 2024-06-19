@@ -111,12 +111,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['registro'])) {
     $email = $input['email'];
     $password = $input['password'];
 
+    // Get the last id from the usuario table
+    $result = $conexion->query("SELECT MAX(id) AS max_id FROM usuario");
+    $row = $result->fetch_assoc();
+    $id = $row['max_id'] + 1;
+
     // Prepare the SQL query
-    $sql = "INSERT INTO usuario (email, contraseña, fecha_alta) VALUES (?, ?, NOW())";
+    $sql = "INSERT INTO usuario (id, email, contraseña, fecha_alta) VALUES (?, ?, ?, NOW())";
     $stmt = $conexion->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("ss", $email, $password);
+        $stmt->bind_param("iss", $id, $email, $password);
 
         if ($stmt->execute()) {
             echo json_encode(array("success" => true));

@@ -71,7 +71,7 @@ echo '
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                             </a>
 
-                            <a href="perfil.php" class="my-auto">
+                            <a href="perfilAdmin.php" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
                         </div>

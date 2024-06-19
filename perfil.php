@@ -98,7 +98,6 @@ if (session_status() == PHP_SESSION_NONE) {
     <!-- Aquí va el código HTML para con botones de edición y eliminación -->
     <div class="container py-5">
         <div class="row g-5 align-items-center">
-            <a href="adminstracion_platos.php" class="btn btn-primary">Administrar comida</a>
             <a href="pedidos.php" class="btn btn-primary">Historial de Pedidos</a>
             <a href="mis_reseñas.php" class="btn btn-primary">Ver mis reseñas</a>
             <a href="editarperfil.php" class="btn btn-primary">Editar Perfil</a>

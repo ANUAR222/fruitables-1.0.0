@@ -17,6 +17,31 @@ if (!isset($_SESSION['id'])) {
   <title>Modernize Free</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
+<style>
+    .message-row {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.message-sender {
+    font-weight: bold;
+    color: #333;
+}
+
+.message-date {
+    color: #777;
+}
+
+.message-content {
+    font-size: 14px;
+}
+
+.message-role {
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #999;
+}
+</style>
 </head>
 
 <body>
@@ -129,9 +154,6 @@ if (!isset($_SESSION['id'])) {
   <div class="card">
     <div class="card-body">
       <h5 class="card-title fw-semibold mb-4">Enviar un mensaje</h5>
-
-
-
         <!-- Formulario para enviar un mensaje -->
         <form id="crearMensajeForm" action="gestionMensajes.php" method="post">
             <div class="container-fluid py-5 mt-5">
@@ -198,22 +220,22 @@ $stmt_mensajes->execute();
 $result_mensajes = $stmt_mensajes->get_result();
 
 while ($mensajes = $result_mensajes->fetch_assoc()) {
-    echo '<tr>';
+    echo '<tr class="message-row">';
     if($mensajes['admin']){
-        echo '<td>' . $mensajes['admin'] . '</td>';
+        echo '<td class="message-sender">' . $mensajes['admin'] . '</td>';
     }
     else if($mensajes['duenio']){
-        echo '<td>' . $mensajes['duenio'] . '</td>';
+        echo '<td class="message-sender">' . $mensajes['duenio'] . '</td>';
     }
-    echo '<td>' . $mensajes['fecha'] . '</td>
-          <td>' . $mensajes['mensaje'] . '</td>';
+    echo '<td class="message-date">' . $mensajes['fecha'] . '</td>
+          <td class="message-content">' . $mensajes['mensaje'] . '</td>';
 
     // Agregar remitente
     if($mensajes['admin']){
-        echo '<td>Administrador</td>';
+        echo '<td class="message-role">Administrador</td>';
     }
     else if($mensajes['duenio']){
-        echo '<td>Duenio</td>';
+        echo '<td class="message-role">Duenio</td>';
     }
 
     echo '</tr>';

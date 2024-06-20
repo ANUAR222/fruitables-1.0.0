@@ -4,11 +4,10 @@ $nombre = $_POST['nombre'];
 $precio = $_POST['precio'];
 $peso = $_POST['peso'];
 $calorias = $_POST['calorias'];
-$category = $_POST['Category'];
 $descripcion = $_POST['descripcion'];
 $stock = $_POST['stock'];
-$stmt = $conexion->prepare("INSERT INTO comidas (Nombre, Precio, Peso, Calorías, Ingredientes, Tipo, Stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssssi", $nombre, $precio, $peso, $calorias, $descripcion, $category, $stock);
+$stmt = $conexion->prepare("INSERT INTO comidas (Nombre, Precio, Peso, Calorías, Ingredientes, Stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("sssssi", $nombre, $precio, $peso, $calorias, $descripcion, $stock);
 $stmt->execute();
 $stmt->close();
 if(is_uploaded_file($_FILES['imagenes']['tmp_name'])){

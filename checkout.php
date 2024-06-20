@@ -33,44 +33,40 @@ require 'nav_bar.php'
     </head>
 
     <body>
-
-
-
-
-        <!-- Modal Search Start -->
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center">
-                        <div class="input-group w-75 mx-auto d-flex">
-                            <form action="shop.php" method="GET" class="d-flex w-100">
-                                <input type="search" name="query" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                                <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </form>
-                        </div>
+    <!-- Modal Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Búsqueda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center">
+                    <div class="input-group w-75 mx-auto d-flex">
+                        <form action="adminstracion_platos.php" method="GET" class="d-flex w-100">
+                            <input type="search" name="query" class="form-control p-3" placeholder="Palabras clave" aria-describedby="search-icon-1">
+                            <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
-        <!-- Modal Search End -->
+    </div>
+    <!-- Modal Search End -->
 
 
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Checkout</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                <li class="breadcrumb-item active text-white">Checkout</li>
-            </ol>
-        </div>
-        <!-- Single Page Header End -->
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Compra</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="cart.php">Carrito</a></li>
+            <li class="breadcrumb-item active text-white">Compra</li>
+        </ol>
+    </div>
 
 
         <!-- Checkout Page Start -->
@@ -136,7 +132,6 @@ require 'nav_bar.php'
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Imagen</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Precio</th>
                                         <th scope="col">Cantidad</th>
@@ -163,7 +158,6 @@ require 'nav_bar.php'
                                         $subtotal += $total_item;
                                         echo '
                                     <tr>
-                                        <td><img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt=""></td>
                                         <td>' . $comida['Nombre'] . '</td>
                                         <td>' . $comida['Precio'] . ' $</td>
                                         <td>' . $comida['cantidad'] . '</td>
@@ -184,15 +178,15 @@ require 'nav_bar.php'
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="4" class="text-end">Subtotal:</td>
+                                        <td colspan="3" class="text-end">Subtotal:</td>
                                         <td><?php echo number_format($subtotal, 2); ?> $</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end">Envío:</td>
+                                        <td colspan="3" class="text-end">Envío:</td>
                                         <td><?php echo number_format($shipping_cost, 2); ?> $</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end">Total:</td>
+                                        <td colspan="3" class="text-end">Total:</td>
                                         <td><?php echo number_format($total, 2); ?> $</td>
                                         <input type="hidden" name="precio_total" value="<?=$total?>">
                                     </tr>
@@ -201,7 +195,7 @@ require 'nav_bar.php'
                             </div>
                         </div>
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                            <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
+                            <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Hacer compra</button>
                         </div>
                     </div>
                 </form>
@@ -226,89 +220,12 @@ require 'nav_bar.php'
             });
         </script>
 
-
-
-
-
-        <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
-            <div class="container py-5">
-                <div class="pb-4 mb-4" style="border-bottom: 1px solid rgba(226, 175, 24, 0.5) ;">
-                    <div class="row g-4">
-                        <div class="col-lg-3">
-                            <a href="#">
-                                <h1 class="text-primary mb-0">Fruitables</h1>
-                                <p class="text-secondary mb-0">Fresh products</p>
-                            </a>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="position-relative mx-auto">
-                                <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
-                                <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="d-flex justify-content-end pt-3">
-                                <a class="btn  btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-youtube"></i></a>
-                                <a class="btn btn-outline-secondary btn-md-square rounded-circle" href=""><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-5">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-item">
-                            <h4 class="text-light mb-3">Why People Like us!</h4>
-                            <p class="mb-4">typesetting, remaining essentially unchanged. It was 
-                                popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
-                            <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="d-flex flex-column text-start footer-item">
-                            <h4 class="text-light mb-3">Shop Info</h4>
-                            <a class="btn-link" href="">About Us</a>
-                            <a class="btn-link" href="">Contact Us</a>
-                            <a class="btn-link" href="">Privacy Policy</a>
-                            <a class="btn-link" href="">Terms & Condition</a>
-                            <a class="btn-link" href="">Return Policy</a>
-                            <a class="btn-link" href="">FAQs & Help</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="d-flex flex-column text-start footer-item">
-                            <h4 class="text-light mb-3">Account</h4>
-                            <a class="btn-link" href="">My Account</a>
-                            <a class="btn-link" href="">Shop details</a>
-                            <a class="btn-link" href="">Shopping Cart</a>
-                            <a class="btn-link" href="">Wishlist</a>
-                            <a class="btn-link" href="">Order History</a>
-                            <a class="btn-link" href="">International Orders</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-item">
-                            <h4 class="text-light mb-3">Contact</h4>
-                            <p>Address: 1429 Netus Rd, NY 48247</p>
-                            <p>Email: Example@gmail.com</p>
-                            <p>Phone: +0123 4567 8910</p>
-                            <p>Payment Accepted</p>
-                            <img src="img/payment.png" class="img-fluid" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer End -->
-
         <!-- Copyright Start -->
         <div class="container-fluid copyright bg-dark py-4">
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
+                        <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>SaberComer</a>, All right reserved.</span>
                     </div>
                     <div class="col-md-6 my-auto text-center text-md-end text-white">
                         <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->

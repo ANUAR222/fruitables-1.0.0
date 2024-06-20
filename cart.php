@@ -95,7 +95,6 @@ if (isset($_SESSION['cart'])) {
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Productos</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Precio</th>
                     <th scope="col">Cantidad</th>
@@ -131,11 +130,7 @@ if (isset($_SESSION['cart'])) {
                     $subtotal += $total_item;
                     echo '
                         <tr>
-                            <th scope="row">
-                                <div class="d-flex align-items-center">
-                                    <img src="img/vegetable-item-5.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                </div>
-                            </th>
+                           
                             <td>
                                 <p class="mb-0 mt-4">' . $comida['Nombre'] . '</p>
                             </td>

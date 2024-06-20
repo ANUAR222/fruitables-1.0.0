@@ -1,5 +1,5 @@
 <?php
-require 'nav_bar.php'
+require 'nav_bar_admin.php'
 ?>
 
 <!DOCTYPE html>
@@ -42,28 +42,31 @@ require 'nav_bar.php'
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content rounded-0">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Búsqueda</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex align-items-center">
                 <div class="input-group w-75 mx-auto d-flex">
-                    <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                    <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                    <form action="adminstracion_platos.php" method="GET" class="d-flex w-100">
+                        <input type="search" name="query" class="form-control p-3" placeholder="Palabras clave" aria-describedby="search-icon-1">
+                        <button type="submit" id="search-icon-1" class="input-group-text p-3 border-0" style="background: none;">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
-<!-- Modal Search End -->
-
 
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">Adminsitracion de platos</h1>
+    <h1 class="text-center text-white display-6">Añadir comida</h1>
     <ol class="breadcrumb justify-content-center mb-0">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active text-white">Shop</li>
+        <li class="breadcrumb-item"><a href="indexAdmin.php">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="adminstracion_platos.php">Administrar platos</a></li>
+        <li class="breadcrumb-item active text-white">Añadir comida</li>
     </ol>
 </div>
 <form id="aniadirP" action="gestionAniadirPlato.php" method="post" enctype="multipart/form-data">
@@ -92,14 +95,6 @@ require 'nav_bar.php'
                                     <div class='mb-3'>
                                         <label for='nombre' class='form-label'>Nombre</label>
                                         <input type='text' class='form-control' name='nombre' placeholder='Nombre'>
-                                    </div>
-                                    <div class='mb-3'>
-                                        <label for='Category' class='form-label'>Category</label>
-                                        <select name='Category'>
-                                            <option value='Entrante'>Entrante</option>
-                                            <option value='Principal'>Principal</option>
-                                            <option value='Postre'>Postre</option>";
-                                        </select>
                                     </div>
                                     <div class='mb-3'>
                                         <label for='precio' class='form-label'>Precio</label>

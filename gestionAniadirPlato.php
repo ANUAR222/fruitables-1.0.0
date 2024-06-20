@@ -6,7 +6,7 @@ $peso = $_POST['peso'];
 $calorias = $_POST['calorias'];
 $descripcion = $_POST['descripcion'];
 $stock = $_POST['stock'];
-$stmt = $conexion->prepare("INSERT INTO comidas (Nombre, Precio, Peso, Calorías, Ingredientes, Stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conexion->prepare("INSERT INTO comidas (Nombre, Precio, Peso, Calorías, Ingredientes, Stock) VALUES (?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssi", $nombre, $precio, $peso, $calorias, $descripcion, $stock);
 $stmt->execute();
 $stmt->close();
